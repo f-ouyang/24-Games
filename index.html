@@ -1,0 +1,30 @@
+// index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#317EFB" />
+  <link rel="manifest" href="assets/manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <title>My PWA App</title>
+</head>
+<body>
+  <h1>Welcome to My PWA</h1>
+  <nav>
+    <a href="pages/model1.html">Mode 1</a>
+  </nav>
+  <script src="js/script.js"></script>
+  <script>
+    const isDevMode = location.hostname === 'localhost';
+    if ('serviceWorker' in navigator && !isDevMode) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.error('SW registration failed:', err));
+    } else {
+      console.log('Dev mode: Service Worker not registered');
+    }
+  </script>
+</body>
+</html>
