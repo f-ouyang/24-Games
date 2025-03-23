@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../Learn PWA/Simple Web"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Game 24 Code"
+	}
+}

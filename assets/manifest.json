@@ -3,6 +3,8 @@
   "short_name": "PWAApp",
   "start_url": "./index.html",
   "display": "standalone",
+  "orientation": "landscape",
+  "scope": "./",
   "background_color": "#ffffff",
   "theme_color": "#317EFB",
   "icons": [

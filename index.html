@@ -11,10 +11,20 @@
   <title>My PWA App</title>
 </head>
 <body>
-  <h1>Welcome to My PWA</h1>
-  <nav>
-    <a href="pages/model1.html">Mode 1</a>
-  </nav>
+  <h1>Welcome to 24 Game!</h1>
+  <h2> Select the Options Bellow</h2>
+  <div class="buttonContainer" id="modeContainer">
+    <a href="pages\singleGroup.html?gameMode=oneSolution" class="button mode" id="modeClassical">
+      Classical</a>
+   <a href="pages\singleGroup.html?gameMode=allSolution" class="button mode" id="modeAllSolu">
+        All Solution</a>
+  <a href="pages/model1.html" class="button mode" id="modeMulitigroup">
+          Multiple Group</a>
+  </div>
+  <div  class="buttonContainer" id="resetContainer">
+  <a href="pages/model1.html" class="button mode" id="accountSettings">
+    Account</a>
+     </div>
   <script src="js/script.js"></script>
   <script>
     const isDevMode = location.hostname === 'localhost';
@@ -27,4 +37,4 @@
     }
   </script>
 </body>
-</html>
+</html> 
