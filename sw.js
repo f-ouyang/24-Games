@@ -2,13 +2,12 @@ const devMode = location.hostname === 'localhost';
 
 const CACHE_NAME = 'pwa-cache-v1';
 const ASSETS_TO_CACHE = [
-  '/',
   'index.html',
   'css/style.css',
   'js/script.js',
   'pages/model1.html',
   'pages/singleGroup.html',
-  'assets/manifest.json'
+  'manifest.json'
 ];
 
 self.addEventListener('install', (event) => {

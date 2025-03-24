@@ -37,9 +37,11 @@
     const isDevMode = location.hostname === 'localhost';
     if ('serviceWorker' in navigator && !isDevMode) {
       navigator.serviceWorker.register('sw.js',{scope: './'})
-        .then(reg => console.log('Service Worker registered with scope:', reg.scope))
-        .then(reg => console.log('From index.html: Service Worker registered'))
-        .catch(err => console.error('SW registration failed:', err));
+      .then(reg => {
+        console.log('Service Worker registered with scope:', reg.scope);
+        console.log('From index.html: Service Worker registered');
+      })
+     .catch(err => console.error('SW registration failed:', err));
     } else {
       console.log('From index.html: Dev mode: Service Worker not registered');
     }
