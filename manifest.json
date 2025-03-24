@@ -6,6 +6,8 @@
   "orientation": "landscape",
   "background_color": "#ffffff",
   "theme_color": "#317EFB",
+  "scope": "/",
+  "description": "A collection of 24 games to play and enjoy.",
   "icons": [
     {
       "src": "assets/icon-192.png",
