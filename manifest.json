@@ -1,6 +1,6 @@
 {
-  "name": "My PWA App",
-  "short_name": "PWAApp",
+  "name": "24 Games Long",
+  "short_name": "24 Games",
   "start_url": "index.html",
   "display": "standalone",
   "orientation": "landscape",
