@@ -32,15 +32,16 @@
   <a href="pages/model1.html" class="button mode" id="accountSettings">
     Account</a>
      </div>
-  <script src="js/script.js"></script>
+  <script src="js/script.js" defer></script>
   <script>
     const isDevMode = location.hostname === 'localhost';
     if ('serviceWorker' in navigator && !isDevMode) {
-      navigator.serviceWorker.register('js/sw.js')
-        .then(reg => console.log('Service Worker registered'))
+      navigator.serviceWorker.register('js/sw.js',{scope: './'})
+        .then(reg => console.log('Service Worker registered with scope:', reg.scope))
+        .then(reg => console.log('From index.html: Service Worker registered'))
         .catch(err => console.error('SW registration failed:', err));
     } else {
-      console.log('Dev mode: Service Worker not registered');
+      console.log('From index.html: Dev mode: Service Worker not registered');
     }
   </script>
 </body>
