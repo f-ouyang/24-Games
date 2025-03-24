@@ -1,12 +1,12 @@
 {
   "name": "24 Games Long",
   "short_name": "24 Games",
-  "start_url": "index.html",
+  "start_url": "/24-Games/index.html",
   "display": "standalone",
   "orientation": "landscape",
   "background_color": "#ffffff",
   "theme_color": "#317EFB",
-  "scope": "/",
+  "scope": "/24-Games",
   "description": "A collection of 24 games to play and enjoy.",
   "icons": [
     {
