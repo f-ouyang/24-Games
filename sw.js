@@ -9,6 +9,7 @@ const ASSETS_TO_CACHE = [
   'pages/singleGroup.html',
   'manifest.json',
   'assets/icon-192.png',
+  'assets/icon180.png',
   'assets/icon-512.png'
 ];
 
@@ -26,6 +27,21 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// Activate event: clean up old caches
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => {
+            console.log('[SW] Deleting old cache:', key);
+            return caches.delete(key);
+          })
+      );
+    })
+  );
+});
 
 self.addEventListener('fetch', (event) => {
   if (devMode) return;
@@ -39,10 +55,12 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       caches.match(cleanUrl).then((response) => {
         return response || fetch(event.request);
-      }).catch(() => {
+      })
+      .catch(err => {
+        console.error('[SW] Fetch failed; serving fallback if available:', err);
         return caches.match('index.html');
       })
-    );
+  );
   } else {
     // Normal cache-first for everything else
     event.respondWith(
