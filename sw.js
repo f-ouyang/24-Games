@@ -9,7 +9,7 @@ const ASSETS_TO_CACHE = [
   'pages/singleGroup.html',
   'manifest.json',
   'assets/icon-192.png',
-  'assets/icon180.png',
+  'assets/icon-180.png',
   'assets/icon-512.png'
 ];
 
