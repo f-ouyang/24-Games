@@ -7,7 +7,9 @@ const ASSETS_TO_CACHE = [
   'js/script.js',
   'pages/model1.html',
   'pages/singleGroup.html',
-  'manifest.json'
+  'manifest.json',
+  'assets/icon-192.png',
+  'assets/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -24,10 +26,30 @@ self.addEventListener('install', (event) => {
   );
 });
 
+
 self.addEventListener('fetch', (event) => {
   if (devMode) return;
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
-  );
-});
+
+  const url = new URL(event.request.url);
+
+  if (event.request.destination === 'document') {
+    // Remove query string for HTML pages
+    const cleanUrl = url.pathname;
+
+    event.respondWith(
+      caches.match(cleanUrl).then((response) => {
+        return response || fetch(event.request);
+      }).catch(() => {
+        return caches.match('index.html');
+      })
+    );
+  } else {
+    // Normal cache-first for everything else
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  }
+}
+);
