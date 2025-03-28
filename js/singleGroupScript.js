@@ -65,32 +65,32 @@ let showNumberOfSolutions = showNumberOfSolutionsDefault;
 {
     let obj = document.getElementById("ID_NUMBER_OF_NUMBERS");
     obj.addEventListener("change", function() {
-        numberOfNumbers = Number(obj.value);
+        numberOfNumbers = Number(this.value);
     });
 
     obj = document.getElementById("ID_MAX_INTEGER");
     obj.addEventListener("input", function() {
-        if (!obj.checkValidity()) {
-            alert(`Invalid Input. Enter a number between 1 and ${obj.max}`);
-            obj.value = maximumNumber;
+        if (!this.checkValidity()) {
+            alert(`Invalid Input. Enter a number between 1 and ${this.max}`);
+            this.value = maximumNumber;
          }else{
-            maximumNumber = Number(obj.value);
+            maximumNumber = Number(this.value);
         }
      });
    
     obj = document.getElementById("ID_TARGET_INTEGER");
     obj.addEventListener("input", function() {
-         if (!obj.checkValidity()) {
-             alert(`Invalid Input. Enter a number between 1 and ${obj.max}`);
-             obj.value = targetInteger;
+         if (!this.checkValidity()) {
+             alert(`Invalid Input. Enter a number between 1 and ${this.max}`);
+             this.value = targetInteger;
           }else{
-             targetInteger = Number(obj.value);
+             targetInteger = Number(this.value);
          }
     });
 
     obj = document.getElementById("ID_ALL_SOLUTIONS");
     obj.addEventListener("change", function() {
-        allSolutions = obj.checked;
+        allSolutions = this.checked;
         let obj2 = document.getElementById("ID_SHOW_NUMBER_OF_SOLUTIONS_LABEL");
         let obj1 = document.getElementById("ID_SHOW_NUMBER_OF_SOLUTIONS");
         if(allSolutions){
