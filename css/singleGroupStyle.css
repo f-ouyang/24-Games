@@ -1,0 +1,107 @@
+body{
+    /* Body of the page, make sure it takes the whole page */
+    margin:0
+    padding:0
+    width: 100%;
+    height: 100%;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* Graphical Definitions of Divisions */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+#ID_DIV_INPUT{
+    /* Division Containing input buttons */
+    position:absolute;
+    top: 0%;
+    left: 0%;
+    width: 15%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin:0;
+    padding:0.01wx;
+    border: 0.01vw solid black; 
+}
+
+#ID_DIV_SETTING{
+    /* Division Containing Setting Fields */
+    position:absolute;
+    top: 0%;
+    left: 80%;
+    width: 20%;
+    height: 50%;
+    display: flex;
+    justify-content: top;
+    align-items: top;
+    flex-direction: column;
+    margin:0;
+    padding-top: 0.5vw;
+    border: 0.01vw solid black; 
+}
+
+#ID_DIV_CONTROLS{
+    /* Division Containing Control Buttons */
+    position:absolute;
+    top: 50%;
+    left: 80%;
+    width: 20%;
+    height: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: normal;
+    align-content: center;
+    flex-direction: column;
+    margin:0;
+    padding-top: 0.5vw;
+    border: 0.01vw solid black; 
+    background-color: lightblue;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* Setting Parameter Labels and Settings */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.hidden{
+    /* Hidden, used to prevent loading flash or FOUC*/
+    display: none;
+}  
+.setting-Group{
+    /* Setting Group */
+    /* The div containers that looks like a button */
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    margin: 0.2vw;
+    padding:0.1vw;
+    padding-left: 0.2vw;
+    width: 95%;
+    height: 3.5vw;
+    display: inline-flex;   
+    font-size: 2vw  ;
+    background-color: blue;
+    font-weight:normal;
+    color: white;
+}
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* Control Buttons */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+.controlButton{
+    /* Control Group */
+    /* The div containers that looks like a button */
+    justify-content: center;
+    align-items: center;
+    margin: 0.2vw;
+    padding:0.1vw;
+    padding-left: 0.2vw;
+    width: 95%;
+    height: 3.5vw;
+    display: inline-flex;   
+    font-size: 2vw  ;
+    background-color: green;
+    font-weight:normal;
+    color: white;
+    border-radius: 1vw;
+}

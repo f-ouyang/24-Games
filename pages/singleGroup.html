@@ -1,14 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Single Group</title>
   <link rel="stylesheet" href="../css/singleGroupStyle.css" />
-  <link rel="manifest" href="../manifest.json" >
+  <link rel="manifest" href="../manifest.json">
 </head>
+
 <body>
-  <h1>Single Group</h1>
-  <a href="../index.html">Back to Home</a>
+
+  <script src="../js/singleGroupScript.js" defer></script>
+  <div id="ID_DIV_INPUT">
+    <input type="checkbox" id="ID_SHOW_SOLUTIONS" class="scaled-checkbox" Here! />
+  </div>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!-- ++++++++++++++++++++++  SETTINGS Panel  ++++++++++++++++++++++++++ -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <div id="ID_DIV_SETTING">
+    <!-- TODO: figure out how to scale the input boxes -->
+    <!-- How many numbers? -->
+    <div class="setting-Group"> No. of Entries<!-- Input box for number of numbers -->
+      <select id="ID_NUMBER_OF_NUMBERS" class="hidden">
+        <option value="" disabled selected>?</option>
+        <!-- Dynamically generate 0–7 options -->
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+      </select>
+    </div>
+    <!-- Maximum Number -->
+    <div class="setting-Group"> Range <!-- Input box for number of numbers -->
+      <input type="number" id="ID_MAX_INTEGER" class="hidden" min="1" max="100" step="1" placeholder="1-100" required />
+    </div>
+
+    <!-- Target Number -->
+    <div class="setting-Group"> Target <!-- Input box for number of numbers -->
+      <input type="number" id="ID_TARGET_INTEGER" class="hidden" min="1" max="100" step="1" placeholder="1-100"
+        required />
+    </div>
+
+    <!-- All solutions -->
+    <div class="setting-Group"> All Solutions <!-- Input box for number of numbers -->
+      <input type="checkbox" id="ID_ALL_SOLUTIONS" class="hidden" />
+      <!-- TODO: Find a way to apply custom style to make it larger, 
+       or change it to slider style. -->
+    </div>
+
+    <!-- Show Number of Solutions -->
+    <div class="setting-Group" id="ID_SHOW_NUMBER_OF_SOLUTIONS_LABEL">
+      Show No. of Sol. <!-- Input box for number of numbers -->
+      <input type="checkbox" id="ID_SHOW_NUMBER_OF_SOLUTIONS" />
+      <!-- TODO: Find a way to apply custom style to make it larger, 
+     or change it to slider style. -->
+    </div>
+
+  </div> <!-- End of ID_DIV_SETTING -->
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!-- ++++++++++++++++++++++  CONTROLSCONTROLS Panel  ++++++++++++++++++++++++++ -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <div id="ID_DIV_CONTROLS">
+    <button id="ID_NEW_GAME" class="controlButton">New Game</button>
+    <button id="ID_ENTER" class="controlButton">Enter</button>
+    <button id="ID_DONE" class="controlButton">Done</button>
+    <button id="ID_START_OVWER" class="controlButton">Start Over</button>
+  </div> <!-- End of ID_DIV_CONTROLS -->
+
 </body>
+
 </html>
