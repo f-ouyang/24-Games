@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Learn PWA/Backup Section 3.4.2/Simple Web"
+		},
+		{
+			"path": "Reference Codes"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Game 24 Code"
+	}
+}

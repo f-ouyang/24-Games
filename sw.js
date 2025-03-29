@@ -5,6 +5,7 @@ const ASSETS_TO_CACHE = [
   'index.html',
   'css/style.css',
   'js/script.js',
+  'js/functions.js',
   'pages/model1.html',
   'pages/singleGroup.html',
   'manifest.json',

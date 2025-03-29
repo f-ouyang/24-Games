@@ -16,12 +16,15 @@ const allSolutionsDefault = false;
 const showNumberOfSolutionsDefault = true;
 
 // Define global variables for the page scope
+// Global variables for settings
 let numberOfNumbers = numberOfNumbersDefault;
 let maximumNumber = maximumNumberDefault;
 let targetInteger = targetIntegerDefault;
 let allSolutions = allSolutionsDefault;
 let showNumberOfSolutions = showNumberOfSolutionsDefault;
-
+// Global variables for tracking the game
+let systemSolution = [];
+let userSolution = [];
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Initialization: enable setting fields and load default numbers
@@ -128,9 +131,33 @@ let showNumberOfSolutions = showNumberOfSolutionsDefault;
         displaySolution(); //display all solutions, highlight the one user entered;
     });
 
-    obj = document.getElementById("ID_START_OVWER");
+    obj = document.getElementById("ID_START_OVER");
     obj.addEventListener("click", function() {
         startInput(); // reset all buttons for the current solution
     });
 
 } // End of Control Buttons
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Game Button Classes
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+class NumberButtonJava extends HTMLButtonElement {
+    // TODO This is a scaffold for now. The final version will have more logic
+    constructor() {
+      super();
+      this.classList.add("numberButton");
+  
+      // Add shared behavior for all buttons
+      this.addEventListener("click", () => {
+        this.select();
+      });
+    }
+  
+    select() {
+      this.classList.add("selected");
+    }
+  
+    deselect() {
+      this.classList.remove("selected");
+    }
+  } // End of NumberButtonJava

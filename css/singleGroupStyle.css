@@ -105,3 +105,27 @@ body{
     color: white;
     border-radius: 1vw;
 }
+.controlButton:disabled {
+    background-color: gray;
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* game buttons */
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+
+.numberButton {
+    margin: 0.5vw;
+    padding: 0.5vw 1vw;
+    font-size: 1.5vw;
+    background-color: lightgray;
+    border: 1px solid #ccc;
+    border-radius: 0.5vw;
+    cursor: pointer;
+  }
+  
+  .numberButton.selected {
+    background-color: lightgreen;
+  }
