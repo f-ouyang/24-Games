@@ -26,6 +26,21 @@ body{
     border: 0.01vw solid black; 
 }
 
+#ID_DIV_EQUATION{
+    /* Division Containing user-input equations */
+    position:absolute;
+    top: 0%;
+    left: 15%;
+    width: 35%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin:0;
+    padding:0.01wx;
+    border: 0.01vw solid black; 
+}
 #ID_DIV_SETTING{
     /* Division Containing Setting Fields */
     position:absolute;
@@ -104,6 +119,7 @@ body{
     font-weight:normal;
     color: white;
     border-radius: 1vw;
+    cursor: pointer;
 }
 .controlButton:disabled {
     background-color: gray;
@@ -128,4 +144,25 @@ body{
   
   .numberButton.selected {
     background-color: lightgreen;
+  }
+
+  /* Style the green circular dropdown */
+select.op-button {
+    appearance: none;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 3vw;
+    height: 3vw;
+    text-align: center;
+    font-size: 1.5vw;
+    text-align-last: center;
+    padding: 0;
+    cursor: pointer;
+  }
+  
+  /* Remove arrow for more control (optional, Chrome) */
+  select.op-button::-ms-expand {
+    display: none;
   }

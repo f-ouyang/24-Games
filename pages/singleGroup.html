@@ -10,7 +10,7 @@
 </head>
 
 <body>
-
+  <script src = "../js/math.js"> </script>
   <script src="../js/singleGroupScript.js" defer></script>
   <script src="../js/functions.js" defer></script>
 
@@ -22,14 +22,20 @@
   </div>
 
   <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <!-- ++++++++++++++++++++++  Input Numbers Pannel  ++++++++++++++  -->
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <div id="ID_DIV_EQUATION">
+    <!-- Empty container, to be filled by JavaScript -->
+  </div>
+
+  <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <!-- ++++++++++++++++++++++  SETTINGS Panel  +++++++++++++++++++++ -->
   <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
   <div id="ID_DIV_SETTING">
-    <!-- TODO: figure out how to scale the input boxes -->
     <!-- How many numbers? -->
     <div class="setting-Group"> No. of Entries<!-- Input box for number of numbers -->
-      <select id="ID_NUMBER_OF_NUMBERS" class="hidden">
+      <select id="ID_NUMBER_OF_NUMBERS" class="hidden" style="font-size: 2vw;"> 
         <option value="" disabled selected>?</option>
         <!-- Dynamically generate 0–7 options -->
         <option value="0">0</option>
@@ -44,16 +50,16 @@
     </div>
     <!-- Maximum Number -->
     <div class="setting-Group"> Range <!-- Input box for number of numbers -->
-      <input type="number" id="ID_MAX_INTEGER" class="hidden" min="1" max="100" step="1" placeholder="1-100" required />
+      <input type="number" id="ID_MAX_INTEGER" class="hidden" min="1" max="100" step="1" 
+      placeholder="1-100" style="font-size:2vw;" required />
     </div>
 
     <!-- Target Number -->
     <div class="setting-Group"> Target <!-- Input box for number of numbers -->
       <input type="number" id="ID_TARGET_INTEGER" class="hidden" min="1" max="100" step="1" placeholder="1-100"
-        required />
+        required style="font-size:2vw;"/>
     </div>
-
-    <!-- All solutions -->
+     <!-- All solutions -->
     <div class="setting-Group"><!-- Input box for number of numbers -->
        <span>All Solutions </span>
       <input type="checkbox" id="ID_ALL_SOLUTIONS" class="hidden" />
@@ -72,7 +78,7 @@
   </div> <!-- End of ID_DIV_SETTING -->
 
   <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-  <!-- ++++++++++++++++++++++  CONTROLSCONTROLS Panel  ++++++++++++++++++++++++++ -->
+  <!-- ++++++++++++++++++++++  CONTROLS Panel  ++++++++++++++++++++++++++ -->
   <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <div id="ID_DIV_CONTROLS">
     <button id="ID_NEW_GAME" class="controlButton">New Game</button>
