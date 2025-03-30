@@ -102,6 +102,7 @@ function startNewGame() {
                 operand1.id = `ID_OPRAND_BUTTON_1_${i}`;
                 operand1.textContent="?";
                 operand1.classList.add("numberButton");
+                operand1.classList.add('targetButton');
                 row.appendChild(operand1);
             
                 // Operator Selector
@@ -145,6 +146,88 @@ function displaySolution() {
 
 function startInput() {
 }
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Drag and Drop Supporting
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// For drag source
+function draggableDragStartHandler(event){ 
+    // store a ref. on the dragged elem
+    event.dataTransfer.setData("text/plain", event.target.id);
+}
+
+
+
+
+// Functions for drop target
+
+function targetDragEnterHandler(event){
+    // highlight potential drop target when the draggable element enters it
+    if (event.target.classList.contains("dropzone")) {
+        event.target.classList.add("dragover");
+    }
+
+    //Register the dragged element
+    const draggedID=event.dataTransfer.getData("text/plain");
+    const draggedElement=document.getElementById(draggedID);
+    event.target.sourceObject=draggedElement;
+    event.preventDefault(); //stopes dragleave from firing when dragging over the target
+
+    // Get the number from source and update state and display
+    event.target.previousNumber=event.target.currentNumber;
+    event.target.currentNumber=Number(event.target.sourceObject.innerText);
+    event.target.innerText=String(event.target.currentNumber);
+    //disable the draggable element
+    event.target.sourceObject.style.opacity = 0.5
+    event.target.sourceObject.style.pointer_Events = "none";
+    event.target.sourceObject.removeAttribute("draggable");
+}
+
+function targetDragLeaveHandler(event){
+    // reset background of potential drop target when the draggable element leaves it
+    if (event.target.classList.contains("dropzone")) {
+        event.target.classList.remove("dragover");
+    }
+    //Restore numbers
+    event.target.currentNumber=event.target.previousNumber;
+    event.target.innerText=String(event.target.currentNumber);
+    //Reenable the draggable element
+    event.target.sourceObject.style.opacity = 1;
+    event.target.sourceObject.style.pointer_Events = "auto";
+    event.target.sourceObject.setAttribute("draggable", "true");
+}
+
+function targetDropHandler(event){
+    event.preventDefault();
+    event.target.classList.remove("dragover");  
+}
+
+
+function targetDragOverHandler(event){
+    event.preventDefault(); //stopes dragleave from firing when dragging over the target
+    // prevent default to allow drop This is required for drop to fire.
+}
+
+function targetClickHandler(event){
+    //Reset the states
+   
+    //Reset the target: no need
+    
+    //event.target.currentNumber=event.target.previousNumber;
+    //event.target.innerText=String(event.target.currentNumber);
+    
+    
+    //Reset the source
+    sourceObject= event.target.sourceObject;
+    sourceObject.style.opacity = 1;
+    event.target.sourceObject.style.pointer_Events = "auto";
+    event.target.sourceObject.setAttribute("draggable", "true");
+    const displayNumber=Math.round(Math.random()*1000); // random integer between 0 and 1000
+    event.target.sourceObject.innerText=displayNumber; // display the number in text
+}
+
+
+
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Support Functions
@@ -343,6 +426,4 @@ function getSolutions(numbers,targetNumber){
 
         return eqnArray;    
     }
-    
-
 }// end of function getSolutions(numbers,targetNumber)

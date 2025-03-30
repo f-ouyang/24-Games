@@ -148,9 +148,7 @@ class numberButtonJavaClass extends HTMLButtonElement {
       this.classList.add("numberButton");
   
       // Add shared behavior for all buttons
-      this.addEventListener("click", () => {
-        this.select();
-      });
+      this.addEventListener("dragstart", draggableDragStartHandler);
   
       // Internal state to track operands and operator
       const state = {

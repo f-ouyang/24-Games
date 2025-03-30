@@ -177,7 +177,14 @@ body{
     cursor: pointer;
   }
   /* DOTO: define disabled appearance? */
-  
+
+  .targetButton{
+    /* No definition, just a place holder for hover over, etc. */
+  }
+  .targetButton.dragover{
+    /* Used for drop buttons in equations. */
+    background-color: purple;
+  }
 
   /* Style the green circular dropdown */
 select.op-button {
