@@ -41,6 +41,40 @@ body{
     padding:0.01wx;
     border: 0.01vw solid black; 
 }
+
+#ID_DIV_SOLUTION{
+    /* Division Containing user-input equations */
+    position:absolute;
+    top: 0%;
+    left: 50%;
+    width: 30%;
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin:0;
+    padding:0.01wx;
+    border: 0.01vw solid black; 
+}
+
+#ID_DIV_SCORE{
+    /* Division Containing user-input equations */
+    position:absolute;
+    top: 70%;
+    left: 50%;
+    width: 30%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin:0;
+    padding:0.01wx;
+    border: 0.01vw solid black; 
+}
+
+
 #ID_DIV_SETTING{
     /* Division Containing Setting Fields */
     position:absolute;
@@ -133,18 +167,17 @@ body{
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 .numberButton {
-    margin: 0.5vw;
-    padding: 0.5vw 1vw;
+    margin: 0.1vw;
+    padding: 0.2vw 1vw;
     font-size: 1.5vw;
-    background-color: lightgray;
+    color:white;
+    background-color: green;
     border: 1px solid #ccc;
     border-radius: 0.5vw;
     cursor: pointer;
   }
+  /* DOTO: define disabled appearance? */
   
-  .numberButton.selected {
-    background-color: lightgreen;
-  }
 
   /* Style the green circular dropdown */
 select.op-button {
@@ -165,4 +198,35 @@ select.op-button {
   /* Remove arrow for more control (optional, Chrome) */
   select.op-button::-ms-expand {
     display: none;
+  }
+
+  /* Styles for the equation pannel */
+  .equation-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+    margin-bottom: 1vw;
+  }
+  
+  /* Test: can be deleted? 
+  .equation-button,
+  .equation-result {
+    width: 3vw;
+    height: 3vw;
+    font-size: 1.5vw;
+    border-radius: 50%;
+    background-color: #ccc;
+    border: none;
+  } */
+  
+  .equation-operator {
+    width: 3vw;
+    height: 3vw;
+    font-size: 1.5vw;
+    text-align: center;
+  }
+  
+  .equation-equals {
+    font-size: 1.5vw;
+    font-weight: bold;
   }

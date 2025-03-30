@@ -38,13 +38,18 @@ function startNewGame() {
         // It is in singleGroupScript.js. The class is numberButtonJavaClass
          
         // 2. Register it as a custom built-in element (extends <button>)
-        customElements.define("number-button", numberButtonJavaClass, { extends: "button" });
-        
+        // customElements.define("number-button", numberButtonJavaClass, { extends: "button" });
+        // Skip this: it is already defined at page loading.
+
         // 3. Create and insert the buttons dynamically
  
         
         // 4. Call this function with however many buttons you want
         createNumberButtons(numberOfNumbers); 
+        // 5. Generate the equations buttons. The links need to be set up later.
+        generateEquations(numberOfNumbers);
+
+
     } // End of Generate all number buttons
     { // Generae and store solutions
         systemSolution = [];
@@ -84,6 +89,51 @@ function startNewGame() {
         container.appendChild(btn);
         }
     }
+        function generateEquations(numberOfNumbers) {
+            const container = document.getElementById("ID_DIV_EQUATION");
+            container.innerHTML = ""; // Clear existing content
+        
+            for (let i = 0; i < numberOfNumbers - 1; i++) {
+                const row = document.createElement("div");
+                row.classList.add("equation-row");
+            
+                // Operand Button 1
+                const operand1 = document.createElement("button", { is: "target-button" });
+                operand1.id = `ID_OPRAND_BUTTON_1_${i}`;
+                operand1.textContent="?";
+                operand1.classList.add("numberButton");
+                row.appendChild(operand1);
+            
+                // Operator Selector
+                const opSelect = document.createElement("select", { is: "op-selector" });
+                opSelect.id = `ID_OP_SELECT_${i}`;
+                opSelect.classList.add("equation-operator");
+                row.appendChild(opSelect);
+            
+                // Operand Button 2
+                const operand2 = document.createElement("button", { is: "target-button" });
+                operand2.id = `ID_OPRAND_BUTTON_2_${i}`;
+                operand2.classList.add("numberButton");
+                operand2.textContent = "?";
+                row.appendChild(operand2);
+            
+                // Equal sign text
+                const equalSign = document.createElement("span");
+                equalSign.textContent = " = ";
+                equalSign.classList.add("numberButton");
+                row.appendChild(equalSign);
+            
+                // Result Button
+                const resultBtn = document.createElement("button", { is: "number-button" });
+                resultBtn.id = `ID_RESULT_BUTTON_${i}`;
+                resultBtn.classList.add("equation-result");
+                resultBtn.textContent = "?";
+                row.appendChild(resultBtn);
+            
+                container.appendChild(row);
+                }
+      }
+      
 
 } // End of startNewGame
 
