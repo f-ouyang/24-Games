@@ -24,6 +24,10 @@
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // This function is called when the user clicks the "New Game" button. It populates the problem and saves the solution.
 function startNewGame() {
+    {
+        //Update all settings
+        setupFieldUpdates();
+    }
     { // Enable other buttons
         let obj = document.getElementById("ID_ENTER");
         obj.disabled = false;
@@ -72,6 +76,9 @@ function startNewGame() {
             //This must be consistent with those in createNumberButtons.
             let buttonObject=document.getElementById(buttonID);
             buttonObject.textContent=inputNumbers[buttonIndex];
+            // Enable the button and set the number
+            buttonObject.disabled = false;
+            buttonObject.draggable = true; // Make it draggable
         }
     }
     {   // Construct the empty equations
@@ -87,56 +94,70 @@ function startNewGame() {
         btn.id = `ID_NUMBER_BUTTON_${i}`;
         btn.textContent = "?";
         container.appendChild(btn);
-        }
-    }
-        function generateEquations(numberOfNumbers) {
-            const container = document.getElementById("ID_DIV_EQUATION");
-            container.innerHTML = ""; // Clear existing content
+        }   
+    }   // End of createNumberButtons function
+    function generateEquations(numberOfNumbers) {
+        const container = document.getElementById("ID_DIV_EQUATION");
+        container.innerHTML = ""; // Clear existing content
+    
+        for (let i = 0; i < numberOfNumbers - 1; i++) {
+            const row = document.createElement("div");
+            row.classList.add("equation-row");
+            const oprandeID1 = `ID_OPRAND_BUTTON_1_${i}`;
+            const oprandeID2 = `ID_OPRAND_BUTTON_2_${i}`;
+            const opID = `ID_OP_SELECT_${i}`;
+            // Operand Button 1
+            const operand1 = document.createElement("button", { is: "target-button" });
+            operand1.id = oprandeID1;
+            operand1.textContent="?";
+            // operand1.classList.add("numberButton"); // Should have been added in class
+            // operand1.classList.add('targetButton'); // Should have been added in class
+            row.appendChild(operand1);
         
-            for (let i = 0; i < numberOfNumbers - 1; i++) {
-                const row = document.createElement("div");
-                row.classList.add("equation-row");
-            
-                // Operand Button 1
-                const operand1 = document.createElement("button", { is: "target-button" });
-                operand1.id = `ID_OPRAND_BUTTON_1_${i}`;
-                operand1.textContent="?";
-                operand1.classList.add("numberButton");
-                operand1.classList.add('targetButton');
-                row.appendChild(operand1);
-            
-                // Operator Selector
-                const opSelect = document.createElement("select", { is: "op-selector" });
-                opSelect.id = `ID_OP_SELECT_${i}`;
-                opSelect.classList.add("equation-operator");
-                row.appendChild(opSelect);
-            
-                // Operand Button 2
-                const operand2 = document.createElement("button", { is: "target-button" });
-                operand2.id = `ID_OPRAND_BUTTON_2_${i}`;
-                operand2.classList.add("numberButton");
-                operand2.textContent = "?";
-                row.appendChild(operand2);
-            
-                // Equal sign text
-                const equalSign = document.createElement("span");
-                equalSign.textContent = " = ";
-                equalSign.classList.add("numberButton");
-                row.appendChild(equalSign);
-            
-                // Result Button
-                const resultBtn = document.createElement("button", { is: "number-button" });
-                resultBtn.id = `ID_RESULT_BUTTON_${i}`;
-                resultBtn.classList.add("equation-result");
-                resultBtn.textContent = "?";
-                row.appendChild(resultBtn);
-            
-                container.appendChild(row);
-                }
-      }
-      
+            // Operator Selector
+            const opSelect = document.createElement("select", { is: "op-selector" });
+            opSelect.id = opID;
+            //opSelect.classList.add("equation-operator"); //Should have been added in class
+            row.appendChild(opSelect);
+        
+            // Operand Button 2
+            const operand2 = document.createElement("button", { is: "target-button" });
+            operand2.id = oprandeID2;
+            // operand2.classList.add("numberButton"); // Should have been added in class.
+            operand2.textContent = "?";
+            row.appendChild(operand2);
+        
+            // Equal sign text
+            const equalSign = document.createElement("span");
+            equalSign.textContent = " = ";
+            equalSign.classList.add("numberButton"); 
+            row.appendChild(equalSign);
+        
+            // Result Button
+            const resultBtn = document.createElement("button", { is: "number-button" });
+            resultBtn.id = `ID_RESULT_BUTTON_${i}`;
+            resultBtn.classList.add("equation-result");
+            resultBtn.textContent = "?";
+            row.appendChild(resultBtn);
+        
+            container.appendChild(row);
 
-} // End of startNewGame
+            // Link All Buttons
+            {
+                const oprandeID1 = `ID_OPRAND_BUTTON_1_${i}`;
+                const oprandeID2 = `ID_OPRAND_BUTTON_2_${i}`;
+                const opID = `ID_OP_SELECT_${i}`;
+                let obj;
+                obj = document.getElementById(oprandeID1);
+                obj.answerObject = resultBtn;
+                obj = document.getElementById(oprandeID2);
+                obj.answerObject = resultBtn;
+                obj = document.getElementById(opID);
+                obj.answerObject = resultBtn;
+            } // End of Link All Buttons
+        } // End of loop for generating equations  
+    } // End of generateEquations function      
+} /* End of startNewGame function */
 
 function saveSolution() {
 }
@@ -150,44 +171,61 @@ function startInput() {
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Drag and Drop Supporting
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// For drag source
+// Function For number buttons
 function draggableDragStartHandler(event){ 
     // store a ref. on the dragged elem
     event.dataTransfer.setData("text/plain", event.target.id);
 }
 
+// Function for op-selector (operator selector)
+function handleChange(event) {
+    // for op-selector, we need to update the answer object accordingly.
+    // TODO: can we just use "this" here?
+    const thisObject = event.target; // The op-selector that fired the event
+    answerObject = thisObject.answerObject; // get the link to the result button
+    if (thisObject.value === "?") {
+        answerObject.state.op = null; // Indicate the operator is not set
+    }
+    else {  // Set the operator in the answer object
+        answerObject.state.op = thisObject; // Set the operator in the answer object
+    }
+}
+      
 
 
-
-// Functions for drop target
+// Functions for target buttons
 
 function targetDragEnterHandler(event){
+
+    // TODO: Adjust this part of the right behavior.
     // highlight potential drop target when the draggable element enters it
-    if (event.target.classList.contains("dropzone")) {
+    if (event.target.classList.contains("targetButton")) {
         event.target.classList.add("dragover");
+    } else
+    {
+        console.error("Wrong target!");
     }
 
     //Register the dragged element
-    const draggedID=event.dataTransfer.getData("text/plain");
-    const draggedElement=document.getElementById(draggedID);
-    event.target.sourceObject=draggedElement;
+    const draggedID = event.dataTransfer.getData("text/plain");
+    const draggedElement = document.getElementById(draggedID);
+    event.target.sourceObject = draggedElement;
     event.preventDefault(); //stopes dragleave from firing when dragging over the target
-
+    event.target.textContent = draggedElement.textContent; 
+    /*
     // Get the number from source and update state and display
-    event.target.previousNumber=event.target.currentNumber;
-    event.target.currentNumber=Number(event.target.sourceObject.innerText);
     event.target.innerText=String(event.target.currentNumber);
     //disable the draggable element
     event.target.sourceObject.style.opacity = 0.5
     event.target.sourceObject.style.pointer_Events = "none";
     event.target.sourceObject.removeAttribute("draggable");
+    */
 }
 
 function targetDragLeaveHandler(event){
-    // reset background of potential drop target when the draggable element leaves it
-    if (event.target.classList.contains("dropzone")) {
-        event.target.classList.remove("dragover");
-    }
+    //TODO: replace event.target with "this"?
+    event.target.classList.remove("dragover"); // Reset style
+/*
     //Restore numbers
     event.target.currentNumber=event.target.previousNumber;
     event.target.innerText=String(event.target.currentNumber);
@@ -195,12 +233,37 @@ function targetDragLeaveHandler(event){
     event.target.sourceObject.style.opacity = 1;
     event.target.sourceObject.style.pointer_Events = "auto";
     event.target.sourceObject.setAttribute("draggable", "true");
+    */
+    event.target.sourceObject = null;
+    event.target.textContent = "?"
 }
 
 function targetDropHandler(event){
     event.preventDefault();
     event.target.classList.remove("dragover");  
+    // Update records
+    const draggedID = event.dataTransfer.getData("text/plain");
+    const draggedObj = document.getElementById(draggedID);
+    event.target.sourceObject = draggedObj;
+    event.target.textContent = draggedObj.textContent; 
+    //
+    draggedObj.disabled = true; // Disable the button
+    draggedObj.draggable = false; // Disable dragging
+    //Update answer button
+    switch (event.target.type) {
+        case 1:{
+            event.target.answerObject.state.operand1 = draggedObj;
+            break;
+        }   
+        case 2:{
+            event.target.answerObject.state.operand2 = draggedObj;
+            break;
+        }
+        default:
+            console.error("Illegal Type value for target obj.");
+    }          
 }
+
 
 
 function targetDragOverHandler(event){
@@ -216,14 +279,32 @@ function targetClickHandler(event){
     //event.target.currentNumber=event.target.previousNumber;
     //event.target.innerText=String(event.target.currentNumber);
     
-    
+    // TODO: change this to implement the required functions.
     //Reset the source
     sourceObject= event.target.sourceObject;
+    sourceObject.classList.remove('disabled');//TODO: is this done automatically?
+    sourceObject.disableed = false;
+    answerObject = event.target.answerObject;
+    switch (event.target.type) {
+        case 1:{
+            answerObject.operand1 = null;
+            break;
+        }
+        case 2:{
+            answerObject.operand2 = null;
+            break;
+        }
+        default:
+            console.error("Illegal Type value for target obj.");
+    }
+   
+/*
     sourceObject.style.opacity = 1;
     event.target.sourceObject.style.pointer_Events = "auto";
     event.target.sourceObject.setAttribute("draggable", "true");
     const displayNumber=Math.round(Math.random()*1000); // random integer between 0 and 1000
     event.target.sourceObject.innerText=displayNumber; // display the number in text
+*/
 }
 
 
@@ -236,6 +317,8 @@ function targetClickHandler(event){
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // misc Math functions
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 const randomIntArrayInRange = (min, max, n = 1) =>
     Array.from(
       { length: n },
@@ -426,4 +509,30 @@ function getSolutions(numbers,targetNumber){
 
         return eqnArray;    
     }
-}// end of function getSolutions(numbers,targetNumber)
+}// end of function getSolutions(numbers,targetNumber）
+
+// Utility functions
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Service Setup Field Updates
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+function setupFieldUpdates() {
+ console.log("Setting up field updates...");
+ let obj;
+ // Number of Numbers
+ obj = document.getElementById("ID_NUMBER_OF_NUMBERS");
+ numberOfNumbers = parseInt(obj.value);
+  // Maximum Number
+ obj=document.getElementById("ID_MAX_INTEGER");
+ maximumNumber = parseInt(obj.value);
+  // Target Integer
+ obj=document.getElementById("ID_TARGET_INTEGER");
+ targetInteger = parseInt(obj.value);
+ 
+ // All Solutions
+ obj=document.getElementById("ID_ALL_SOLUTIONS");
+ allSolutions = obj.checked;
+ // Show Number of Solutions
+ obj=document.getElementById("ID_SHOW_NUMBER_OF_SOLUTIONS");
+ showNumberOfSolutions = obj.checked;
+} // End of setupFieldUpdates function
+

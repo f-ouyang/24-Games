@@ -176,7 +176,13 @@ body{
     border-radius: 0.5vw;
     cursor: pointer;
   }
-  /* DOTO: define disabled appearance? */
+
+  .numberButton:disabled{
+    opacity: 0.5;
+    background-color: grey;
+    cursor: not-allowed;
+  }
+
 
   .targetButton{
     /* No definition, just a place holder for hover over, etc. */
@@ -215,7 +221,7 @@ select.op-button {
     margin-bottom: 1vw;
   }
   
-  /* Test: can be deleted? 
+  
   .equation-button,
   .equation-result {
     width: 3vw;
@@ -224,7 +230,7 @@ select.op-button {
     border-radius: 50%;
     background-color: #ccc;
     border: none;
-  } */
+  } 
   
   .equation-operator {
     width: 3vw;
