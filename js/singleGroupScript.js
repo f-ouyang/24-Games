@@ -95,7 +95,7 @@ setupFieldUpdates(); // Set up the field updates for the settings
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Game Button Classes
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class numberButtonJavaClass extends HTMLButtonElement {
+class numberButtonJavaClass extends HTMLButtonElement { 
     constructor() {
       super();
       this.classList.add("numberButton");
@@ -110,8 +110,9 @@ class numberButtonJavaClass extends HTMLButtonElement {
       };
 
       // Default: Disabled
+    
       this.disabled = true;
-      this.draggable = false;
+      this.draggable = false; 
   
       // Wrap state with Proxy to react to changes
       this.state = new Proxy(state, {
@@ -131,15 +132,15 @@ class numberButtonJavaClass extends HTMLButtonElement {
       if ([this.state.operand_1, this.state.operand_2, this.state.op].some(v => v === null)) {
         this.textContent = '?';
       } else {
-        // Corrected op order and added safety
-        const symb1 = this.state.operand_1.textContent;
-        const symb2 = this.state.op.textContent;
-        const symb3 = this.state.operand_2.textContent;
+        const symb1 = this.state.operand_1.value;
+        const symb2 = this.state.op.value;
+        const symb3 = this.state.operand_2.value;
   
         const expression = `${symb1}${symb2}${symb3}`;
         try {
           const answer = math.evaluate(expression);
-          this.textContent = answer;
+          this.value = answer; // Store the answer in the button's value
+          this.textContent = answer.toFixed(0); // Display the answer
         } catch (err) {
           console.error("Expression error:", err);
           this.textContent = '?';
@@ -170,6 +171,7 @@ class targetButtonJavaClass extends HTMLButtonElement {
         this.classList.add("targetButton");
         this.sourceObject = null; // Initialize sourceObject property to null
         this.answerObject = null;
+        this.targetType = null; // To be set when the button is created
 
         // Add shared behavior for all buttons
         this.addEventListener("dragenter", targetDragEnterHandler);
@@ -200,14 +202,17 @@ class targetButtonJavaClass extends HTMLButtonElement {
       this.classList.add("op-button");
       this.classList.add("equation-operator");
   
-      const ops = ["?", "+", "-", "×", "/"];
+      const ops = ["?", "+", "-", "*", "/"];
+      const opsDisplay = ["?", "+", "-", "×", "÷"];
       ops.forEach(op => {
         const option = document.createElement("option");
         option.value = op;
-        option.textContent = op;
         this.appendChild(option);
       });
-      
+      opsDisplay.forEach((op, index) => {
+        this.options[index].textContent = opsDisplay[index];
+      });
+
       this.addEventListener("change",handleChange); ;
       this.answerObject = null;
     }

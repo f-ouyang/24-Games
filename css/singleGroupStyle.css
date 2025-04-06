@@ -1,7 +1,7 @@
 body{
     /* Body of the page, make sure it takes the whole page */
-    margin:0
-    padding:0
+    margin:0;
+    padding:0;
     width: 100%;
     height: 100%;
 }
@@ -186,9 +186,11 @@ body{
 
   .targetButton{
     /* No definition, just a place holder for hover over, etc. */
+    background-color: green;
   }
   .targetButton.dragover{
     /* Used for drop buttons in equations. */
+  
     background-color: purple;
   }
 
@@ -224,12 +226,8 @@ select.op-button {
   
   .equation-button,
   .equation-result {
-    width: 3vw;
-    height: 3vw;
     font-size: 1.5vw;
-    border-radius: 50%;
-    background-color: #ccc;
-    border: none;
+    background-color: green;
   } 
   
   .equation-operator {

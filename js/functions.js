@@ -74,21 +74,19 @@ function startNewGame() {
         for (let buttonIndex = 0; buttonIndex < numberOfNumbers; buttonIndex++) {
             let buttonID=`ID_NUMBER_BUTTON_${buttonIndex}`; 
             //This must be consistent with those in createNumberButtons.
-            let buttonObject=document.getElementById(buttonID);
-            buttonObject.textContent=inputNumbers[buttonIndex];
+            let buttonObject = document.getElementById(buttonID);
+            buttonObject.textContent = inputNumbers[buttonIndex];
+            buttonObject.value = inputNumbers[buttonIndex]; // Save the current number
             // Enable the button and set the number
             buttonObject.disabled = false;
             buttonObject.draggable = true; // Make it draggable
         }
     }
-    {   // Construct the empty equations
-
-    }
+ 
 
     function createNumberButtons(numberOfNumbers) {
         const container = document.getElementById("ID_DIV_INPUT");
         container.innerHTML = ""; // Clear existing buttons
-    
         for (let i = 0; i < numberOfNumbers; i++) {
         const btn = document.createElement("button", { is: "number-button" });
         btn.id = `ID_NUMBER_BUTTON_${i}`;
@@ -110,8 +108,7 @@ function startNewGame() {
             const operand1 = document.createElement("button", { is: "target-button" });
             operand1.id = oprandeID1;
             operand1.textContent="?";
-            // operand1.classList.add("numberButton"); // Should have been added in class
-            // operand1.classList.add('targetButton'); // Should have been added in class
+            operand1.targetType = 1; // Type 1 for operand 1
             row.appendChild(operand1);
         
             // Operator Selector
@@ -123,7 +120,7 @@ function startNewGame() {
             // Operand Button 2
             const operand2 = document.createElement("button", { is: "target-button" });
             operand2.id = oprandeID2;
-            // operand2.classList.add("numberButton"); // Should have been added in class.
+            operand2.targetType = 2; // Type 2 for operand 2
             operand2.textContent = "?";
             row.appendChild(operand2);
         
@@ -175,7 +172,7 @@ function startInput() {
 function draggableDragStartHandler(event){ 
     // store a ref. on the dragged elem
     event.dataTransfer.setData("text/plain", event.target.id);
-}
+ }   
 
 // Function for op-selector (operator selector)
 function handleChange(event) {
@@ -196,46 +193,14 @@ function handleChange(event) {
 // Functions for target buttons
 
 function targetDragEnterHandler(event){
-
-    // TODO: Adjust this part of the right behavior.
     // highlight potential drop target when the draggable element enters it
-    if (event.target.classList.contains("targetButton")) {
-        event.target.classList.add("dragover");
-    } else
-    {
-        console.error("Wrong target!");
-    }
-
-    //Register the dragged element
-    const draggedID = event.dataTransfer.getData("text/plain");
-    const draggedElement = document.getElementById(draggedID);
-    event.target.sourceObject = draggedElement;
+    event.target.classList.add("dragover"); // Add style
     event.preventDefault(); //stopes dragleave from firing when dragging over the target
-    event.target.textContent = draggedElement.textContent; 
-    /*
-    // Get the number from source and update state and display
-    event.target.innerText=String(event.target.currentNumber);
-    //disable the draggable element
-    event.target.sourceObject.style.opacity = 0.5
-    event.target.sourceObject.style.pointer_Events = "none";
-    event.target.sourceObject.removeAttribute("draggable");
-    */
 }
 
 function targetDragLeaveHandler(event){
     //TODO: replace event.target with "this"?
     event.target.classList.remove("dragover"); // Reset style
-/*
-    //Restore numbers
-    event.target.currentNumber=event.target.previousNumber;
-    event.target.innerText=String(event.target.currentNumber);
-    //Reenable the draggable element
-    event.target.sourceObject.style.opacity = 1;
-    event.target.sourceObject.style.pointer_Events = "auto";
-    event.target.sourceObject.setAttribute("draggable", "true");
-    */
-    event.target.sourceObject = null;
-    event.target.textContent = "?"
 }
 
 function targetDropHandler(event){
@@ -250,13 +215,13 @@ function targetDropHandler(event){
     draggedObj.disabled = true; // Disable the button
     draggedObj.draggable = false; // Disable dragging
     //Update answer button
-    switch (event.target.type) {
+    switch (event.target.targetType) {
         case 1:{
-            event.target.answerObject.state.operand1 = draggedObj;
+            event.target.answerObject.state.operand_1 = draggedObj;
             break;
         }   
         case 2:{
-            event.target.answerObject.state.operand2 = draggedObj;
+            event.target.answerObject.state.operand_2 = draggedObj;
             break;
         }
         default:
@@ -279,19 +244,22 @@ function targetClickHandler(event){
     //event.target.currentNumber=event.target.previousNumber;
     //event.target.innerText=String(event.target.currentNumber);
     
-    // TODO: change this to implement the required functions.
     //Reset the source
-    sourceObject= event.target.sourceObject;
+    sourceObject = event.target.sourceObject;
+    if (sourceObject === null) return; // Nothing to do if no source object
     sourceObject.classList.remove('disabled');//TODO: is this done automatically?
-    sourceObject.disableed = false;
+    sourceObject.disabled = false;
+    sourceObject.draggable = true; // Enable dragging again
     answerObject = event.target.answerObject;
-    switch (event.target.type) {
+    event.target.textContent = "?"; // Reset the target button text
+    event.target.sourceObject = null; // Reset the source object reference
+    switch (event.target.targetType) {
         case 1:{
-            answerObject.operand1 = null;
+            answerObject.state.operand_1 = null;
             break;
         }
         case 2:{
-            answerObject.operand2 = null;
+            answerObject.state.operand_2 = null;
             break;
         }
         default:
@@ -516,8 +484,7 @@ function getSolutions(numbers,targetNumber){
 // Service Setup Field Updates
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function setupFieldUpdates() {
- console.log("Setting up field updates...");
- let obj;
+  let obj;
  // Number of Numbers
  obj = document.getElementById("ID_NUMBER_OF_NUMBERS");
  numberOfNumbers = parseInt(obj.value);
