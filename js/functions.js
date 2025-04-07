@@ -194,6 +194,7 @@ function handleChange(event) {
 
 function targetDragEnterHandler(event){
     // highlight potential drop target when the draggable element enters it
+    if (event.target.sourceObject !== null) return; //  Nothing to do if source is already assigned
     event.target.classList.add("dragover"); // Add style
     event.preventDefault(); //stopes dragleave from firing when dragging over the target
 }
@@ -204,6 +205,7 @@ function targetDragLeaveHandler(event){
 }
 
 function targetDropHandler(event){
+    if (event.target.sourceObject !== null) return; // Nothing to do if source is already assigned
     event.preventDefault();
     event.target.classList.remove("dragover");  
     // Update records
@@ -232,6 +234,7 @@ function targetDropHandler(event){
 
 
 function targetDragOverHandler(event){
+    if (event.target.sourceObject !== null) return; //  Nothing to do if source is already assigned
     event.preventDefault(); //stopes dragleave from firing when dragging over the target
     // prevent default to allow drop This is required for drop to fire.
 }
@@ -413,95 +416,7 @@ function getSolutions(numbers,targetNumber){
         } //Compare equations and remove duplicates    
         return eqnArray;
     }
-/*
-    function removeDuplicates(eqns,numbers,symbols) {
-        let uniqueEqns = [];
-        let uniqueEqnsStr = [];
-        let nSol=eqns.length;
-        let nSymbol=symbols.length;
 
-        // Convert input to string array
-        let eqnArray=Object.values(eqns).map(obj=>obj.algebra); // Extract algebraic expressions
-            //eqnArray is modified to remove duplicates
-
-        
-        {   // First, check algebraic expressions for equivalence. We test expressions with random numbers.
-            // In the following loops, eqnArray.length changes as we remove duplicates
-
-            const nTest=10; //Number of tests.
-
-            // Generate random numbers for testing
-            let randomArray=Array.from({length:nTest},()=>Array.from({length:nSymbol},()=>Math.random()));
-            
-        
-            // run test for equivalence
-            for (let i = 0; i < eqnArray.length; i++) {
-                let eqnStrI = eqnArray[i];
-                // generate array of results
-                let valuesI=[];
-                for (let k=0; k<nTest; k++) {
-                    let tempScope={}; // an object to hold the variables
-                    let randNumbers=randomArray[k];
-                    for (let l = 0; l < nSymbol; l++) {
-                        tempScope[symbols[l]] = randNumbers[l];
-                    }
-                    let resultI = math.evaluate(eqnStrI, tempScope);
-                    valuesI.push(resultI);
-                } // for k, fill valuesI
-                // Compare with other equations
-                for (let j=i+1; j < eqnArray.length; j++) { // Note that eqnArray.length changes as we remove duplicates{
-                    let eqnStrJ = eqnArray[j];
-                    let valuesJ=[];
-                    for (let k=0;k<nTest;k++) {
-                        let tempScope={}; // an object to hold the variables
-                        let randNumbers=randomArray[k];
-                        for (let l = 0; l < nSymbol; l++) {
-                            tempScope[symbols[l]] = randNumbers[l];
-                        }
-                        let resultJ = math.evaluate(eqnStrJ, tempScope);
-                        valuesJ.push(resultJ);
-                    } // for k, fill valuesJ
-                    // Compare valuesI and valuesJ
-                    let isSame=valuesI.every((val, index) => val === valuesJ[index]);
-                    // isSame is true if all values are the same
-                    if (isSame) {
-                        // If all values are the same, then the equations are the same
-                        // Remove the equation from the list
-                        eqnArray.splice(j,1);
-                        j--; // Adjust the index
-                    }          
-                } // for j
-            } // for i
-        } // First, check algebraic expressions for equivalence. We test expressions with random numbers.
-        { // Second, check string equivalence with the particular numbers used
-            // In the following loops, eqnArray.length changes as we remove duplicates
-            for (let i = 0; i < eqnArray.length; i++) {
-                let eqnStrI = eqnArray[i];
-                // substitute numbers into the equation string
-                for (let l = 0; l < nSymbol; l++) {
-                    eqnStrI=eqnStrI.replaceAll(symbols[l],String(numbers[l]));
-                }
-                // Now do all j
-                for (let j=i+1; j < eqnArray.length; j++) {
-                    let eqnStrJ = eqnArray[j];
-                    // substitute numbers into the equation string
-                    for (let l = 0; l < nSymbol; l++) {
-                        eqnStrJ=eqnStrJ.replaceAll(symbols[l],String(numbers[l]));
-                    }
-                    // Compare eqnStrI and eqnStrJ
-                    if (eqnStrI===eqnStrJ) {
-                        // If the strings are the same, then the equations are the same
-                        // Remove the equation from the list
-                        eqnArray.splice(j,1);
-                        j--; // Adjust the index
-                    }
-                } // for j
-            } // for i
-        }// Second, check string equivalence with the particular numbers used
-        // All done! Return eqnArray
-
-        return eqnArray;    
-    } */
 }// end of function getSolutions(numbers,targetNumber）
 
 
