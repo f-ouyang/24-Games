@@ -82,7 +82,7 @@ function startNewGame() {
             buttonObject.draggable = true; // Make it draggable
         }
     }
- 
+
 
     function createNumberButtons(numberOfNumbers) {
         const container = document.getElementById("ID_DIV_INPUT");
@@ -153,7 +153,9 @@ function startNewGame() {
                 obj.answerObject = resultBtn;
             } // End of Link All Buttons
         } // End of loop for generating equations  
-    } // End of generateEquations function      
+    } // End of generateEquations function   
+      
+    
 } /* End of startNewGame function */
 
 function saveSolution() {
@@ -461,6 +463,7 @@ function checkEquivalence(expr1, expr2, variables, values, nTest = 10) {
 // Service Setup Field Updates
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function setupFieldUpdates() {
+// Reads set up values from the HTML page and updates global variables
   let obj;
  // Number of Numbers
  obj = document.getElementById("ID_NUMBER_OF_NUMBERS");
@@ -480,3 +483,41 @@ function setupFieldUpdates() {
  showNumberOfSolutions = obj.checked;
 } // End of setupFieldUpdates function
 
+
+
+
+
+// Construct algebraic and numeric expressions from a computation tree
+function buildExpressions(rootID, nodeMap) {
+    const idToSymbol = {}; // maps button IDs to 'a', 'b', 'c', ...
+    let symbolIndex = 0;
+  
+    function traverse(id) {
+      const node = nodeMap[id];
+      const { operand_1, operand_2, op } = node.state;
+  
+      // If it's a leaf node, map it to a letter symbol
+      if (operand_1 === null || operand_2 === null || op === null) {
+        if (!(id in idToSymbol)) {
+          const symbol = String.fromCharCode(97 + symbolIndex); // 'a' = 97
+          idToSymbol[id] = symbol;
+          symbolIndex++;
+        }
+        return {
+          algebraic: idToSymbol[id],
+          numeric: node.value.toString()
+        };
+      }
+  
+      const left = traverse(operand_1);
+      const right = traverse(operand_2);
+      const operator = op.value;
+  
+      return {
+        algebraic: `(${left.algebraic} ${operator} ${right.algebraic})`,
+        numeric: `(${left.numeric} ${operator} ${right.numeric})`
+      };
+    }
+  
+    return traverse(rootID);
+  } // End buildExpressions

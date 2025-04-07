@@ -231,9 +231,3 @@ customElements.define("number-button", numberButtonJavaClass, { extends: "button
 customElements.define("op-selector", OpSelector, { extends: "select" });
 
 
-/* Dynamical generation code example: 
-const op = document.createElement("select", { is: "op-selector" });
-op.id = "ID_OP_SELECTOR";
-document.getElementById("some-container").appendChild(op);
-*/
-
