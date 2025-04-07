@@ -140,7 +140,13 @@ class numberButtonJavaClass extends HTMLButtonElement {
         try {
           const answer = math.evaluate(expression);
           this.value = answer; // Store the answer in the button's value
-          this.textContent = answer.toFixed(0); // Display the answer
+          if(Number.isInteger(answer)) {
+            this.textContent = answer.toFixed(0); // Display the answer
+          }
+          else {// approximate with a simple fraction.
+            const frac = math.fraction(answer); // We hope it won't be complicated by rounding error
+            this.textContent = frac.toFraction(true); // Display the answer
+           }
         } catch (err) {
           console.error("Expression error:", err);
           this.textContent = '?';

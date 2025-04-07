@@ -388,7 +388,32 @@ function getSolutions(numbers,targetNumber){
         let eqns = equations[target];
         return eqns ? eqns : [];
     }
+    function removeDuplicates(eqns,numbers,symbols) {
+        // Convert input to string array
+        let eqnArray=Object.values(eqns).map(obj=>obj.algebra); // Extract algebraic expressions
+            //eqnArray is modified to remove duplicates
 
+        {   //Compare equations and remove duplicates
+            const nTest=10; //Number of tests.               
+            // run test for equivalence
+            for (let i = 0; i < eqnArray.length; i++) { //Note that eqnArray.length changes as we remove duplicates
+                const eqnStrI = eqnArray[i];
+                 // Compare with other equations
+                for (let j=i+1; j < eqnArray.length; j++) { // Note that eqnArray.length changes as we remove duplicates
+                    const eqnStrJ = eqnArray[j];
+                    const isSame = checkEquivalence(eqnStrI, eqnStrJ, symbols, numbers, nTest);
+                    if (isSame) {
+                        // If all values are the same, then the equations are the same
+                        // Remove the equation from the list
+                        eqnArray.splice(j,1); // Delete one element j. eqnArray is modified.
+                        j--; // Adjust the index
+                    }          
+                } // for j
+            } // for i
+        } //Compare equations and remove duplicates    
+        return eqnArray;
+    }
+/*
     function removeDuplicates(eqns,numbers,symbols) {
         let uniqueEqns = [];
         let uniqueEqnsStr = [];
@@ -476,8 +501,45 @@ function getSolutions(numbers,targetNumber){
         // All done! Return eqnArray
 
         return eqnArray;    
-    }
+    } */
 }// end of function getSolutions(numbers,targetNumber）
+
+
+function checkEquivalence(expr1, expr2, variables, values, nTest = 10) {
+    // Build groups of variable names that must share the same value
+    const groups = new Map();
+    for (let i = 0; i < variables.length; i++) {
+      const groupId = values[i];
+      if (!groups.has(groupId)) {
+        groups.set(groupId, []);
+      }
+      groups.get(groupId).push(variables[i]);
+    }
+ 
+    
+    // Run randomized testing
+    for (let t = 0; t < nTest; t++) {
+      const valueAssignments = {};
+  
+      for (const group of groups.values()) {
+        const randVal = Math.random(); // Random value for the group
+        // Assign the same random value to all variables in the group
+        group.forEach(varName => {
+          valueAssignments[varName] = randVal;
+        });
+      }
+  
+      const v1 = math.evaluate(expr1, valueAssignments);
+      const v2 = math.evaluate(expr2, valueAssignments);
+  
+      if (Math.abs(v1 - v2) > 1e-9) {
+         return false;
+      }
+    }
+  
+    return true;
+  } // end of function areEquivalentByGroupedRandomValues(expr1, expr2, variables, values, nTest = 10)
+
 
 // Utility functions
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
