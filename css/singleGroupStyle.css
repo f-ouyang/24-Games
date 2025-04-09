@@ -241,3 +241,32 @@ select.op-button {
     font-size: 1.5vw;
     font-weight: bold;
   }
+
+  /* Text style for the result panel */
+  .solution-heading {
+    color: navy;
+    font-size: 1.4vw;
+    font-weight: bold;
+    margin-bottom: 0.2vw;
+  }
+  
+  .solution-body {
+    color: black;
+    font-size: 1.2vw;
+    font-weight: normal;
+    margin-bottom: 1vw;
+  }
+  
+  .system-heading {
+    color: darkgreen;
+    font-size: 1.4vw;
+    font-weight: bold;
+    margin-top: 1vw;
+    margin-bottom: 0.2vw;
+  }
+  
+  .system-body {
+    color: #333;
+    font-size: 1.2vw;
+    margin-bottom: 1vw;
+  }

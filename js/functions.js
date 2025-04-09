@@ -193,16 +193,90 @@ function saveSolution() { // service function for "Enter"
         alert("The final answer is incorrect. Please check your calculations.");
         return;
     }
-    // Save the solution
+    // Build equation based on user input.
     userSolution = buildExpressions(finalAnswerID); // Get the algebraic and numeric expressions
     alert(`You entered the solution as ${userSolution.algebraic} = ${userSolution.numeric}`);
-    userSolutions.push(userSolution); // Save the solution in the array
-    return;
 
+    // Check equation to see if it is equivalent to previous solutions
+    exp1=userSolution.algebraic;
+    for (let i = 0; i < userSolution.length; i++) {
+        exp2=userSolutions[i].algebraic;
+        if (checkEquivalence(exp1, exp2, inputNumbers)) {
+            exp2Numeric = userSolutions[i].numeric; // Convert to numeric expression
+            alert(`The solution you entered: ${userSolution.numeric} is equivalent to previous solution ${exp2Numeric}.`);
+            return;
+        }
+    }
+
+    // All checks passed. Save the solution.
+    userSolutions.push(userSolution); // Save the solution in the array
+    if (!allSolutions) {
+        // If only one solution is needed, go to done
+        displaySolution(); // Display the solution
+    }
+    return;
 } // End of saveSolution function
 
-function displaySolution() {
-}
+function displaySolution() { // service function for "Done"
+    // Display all solutions
+
+    // Remove user-entered solutions from the list of system solutions
+    let remainingSolutions = systemSolutions; // Starting value
+    const alphabetString = String.fromCharCode(...Array.from({ length: 26 }, (_, i) => i + 97));
+    const symbols = [...alphabetString.slice(0,numberOfNumbers)]; 
+    for (let i = 0; i < userSolutions.length; i++) {
+        const userExp = userSolutions[i].algebraic;
+        for (let j = 0; j < remainingSolutions.length; j++) {
+            const systemExp = remainingSolutions[j];
+            if (checkEquivalence(userExp, systemExp, symbols, inputNumbers)) {
+                // Remove the solution from the list
+                remainingSolutions.splice(j, 1); // Remove the solution from the list
+                j--; // Adjust the index
+            }
+         }
+    }
+
+     // first, build the user and system solution arrays
+    const userSolutionsArray = userSolutions.map(solution => solution.numeric);
+    let systemSolutionsArray = []; // Initialize the array
+    for (let i = 0; i < remainingSolutions.length; i++) {
+        const systemExp = algebraic2Numeric(remainingSolutions[i], inputNumbers); // Convert to numeric expression
+        systemSolutionsArray.push(systemExp); // Add the system solution to the array   
+    }
+    const userSolutionHeading = "You have entered the following solution(s):";
+    let systemSolutionHeading;
+    if (remainingSolutions.length == 0) {
+        systemSolutionHeading = "You have found all solutions.";
+    }
+    else {
+        systemSolutionHeading = "Here are the remaining solutions:";
+    }
+
+    // Second, display the solutions
+    displaySolutions(userSolutionHeading, userSolutionsArray, systemSolutionHeading, systemSolutionsArray);
+
+    // Supporting function to display the solutions
+    function displaySolutions(userSolutionHeading, userSolutionArray, systemSolutionHeading, systemSolutionsArray) {
+        const container = document.getElementById("ID_DIV_SOLUTION");
+        container.innerHTML = ""; // Clear previous contents
+      
+        function createSection(headingText, bodyLines, headingClass, bodyClass) {
+          const heading = document.createElement("div");
+          heading.className = headingClass;
+          heading.textContent = headingText;
+      
+          const body = document.createElement("div");
+          body.className = bodyClass;
+          body.innerHTML = bodyLines.map(line => `${line}<br>`).join("");
+      
+          container.appendChild(heading);
+          container.appendChild(body);
+        }
+      
+        createSection(userSolutionHeading, userSolutionArray, "solution-heading", "solution-body");
+        createSection(systemSolutionHeading, systemSolutionsArray, "system-heading", "system-body");
+      } // End of displaySolutions function
+}// End of displaySolution function
 
 function startInput() {
 }
