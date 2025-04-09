@@ -7,8 +7,8 @@
     allSolutions
     showNumberOfSolutions
 // Global variables for tracking the game
-    systemSolution
-    userSolution
+    systemSolutions
+    userSolutions
  */
 
 /* Summary of functions in this script:
@@ -56,16 +56,16 @@ function startNewGame() {
 
     } // End of Generate all number buttons
     { // Generae and store solutions
-        systemSolution = [];
-        userSolution = [];
-        let nSolution = systemSolution.length;
+        systemSolutions = [];
+        userSolutions = [];
+        let nSolution = systemSolutions.length;
         while (nSolution == 0) {
             inputNumbers = randomIntArrayInRange(1, maximumNumber, numberOfNumbers);
-            systemSolution = getSolutions(inputNumbers,targetInteger);
+            systemSolutions = getSolutions(inputNumbers,targetInteger);
             // This return is an array of alphabetic equations
-            nSolution = systemSolution.length;
+            nSolution = systemSolutions.length;
         }
-         if(systemSolution.length == 0){
+         if(systemSolutions.length == 0){
             alert ("No Solutions. It is not supposed to happen.");
             throw new Error("No solutions found for the generated numbers.");
         }
@@ -158,8 +158,48 @@ function startNewGame() {
     
 } /* End of startNewGame function */
 
-function saveSolution() {
-}
+function saveSolution() { // service function for "Enter"
+    // Check if the solution is valid
+    let finalAnswerID; // ID of the final answer button, to be set in loop;
+    let unusedNumbers = false; // Flag to check if there are unused numbers
+    for (let i = 0; i < numberOfNumbers - 1; i++) {
+        const resultID = `ID_RESULT_BUTTON_${i}`;
+         const resultButton = document.getElementById(resultID);
+        const resultValue = resultButton.value; // Get the value of the result button
+        if (resultValue === "") { 
+            alert("Please complete all equations before saving the solution.");
+            return;
+        }
+        if (!resultButton.disabled) {
+            if(!unusedNumbers){
+                // Have not found unused numbers yet
+                unusedNumbers = true; // Set the flag to true
+                finalAnswerID = resultID; // Save the ID of the result button; it will be validated late
+            } else {
+                alert("You must use up all numbers.");
+                return;
+            }
+        }// End of if (!resultButton.disabled)   
+     } // End of loop for checking equations
+     if(!unusedNumbers){
+        alert("No final answer was found. Please double check your entries.");
+        return;
+     }
+     finalResultButton = document.getElementById(finalAnswerID);
+     const finalAnswer=Math.round(finalResultButton.value); // Get the final answer
+        // The retrieved value is supposed to be an integer, but we should remove rounding errors.
+    // Check if the final answer is correct
+    if (finalAnswer != targetInteger) {
+        alert("The final answer is incorrect. Please check your calculations.");
+        return;
+    }
+    // Save the solution
+    userSolution = buildExpressions(finalAnswerID); // Get the algebraic and numeric expressions
+    alert(`You entered the solution as ${userSolution.algebraic} = ${userSolution.numeric}`);
+    userSolutions.push(userSolution); // Save the solution in the array
+    return;
+
+} // End of saveSolution function
 
 function displaySolution() {
 }
@@ -488,36 +528,66 @@ function setupFieldUpdates() {
 
 
 // Construct algebraic and numeric expressions from a computation tree
-function buildExpressions(rootID, nodeMap) {
-    const idToSymbol = {}; // maps button IDs to 'a', 'b', 'c', ...
-    let symbolIndex = 0;
+function buildExpressions(rootID) {
+    // Input: rootID is the ID of the root button (answer button),
+    // nSymbols is the number of symbols used.
+    // Output: an object with algebraic and numeric expressions.
+
+
+    function buildIdToSymbolMapFromDOM() {
+        const map = {};
+        const buttons = document.querySelectorAll("[id^='ID_NUMBER_BUTTON_']");
+      
+        buttons.forEach(button => {
+          const match = button.id.match(/_(\d+)$/);
+          if (match) {
+            const index = parseInt(match[1], 10);
+            const symbol = String.fromCharCode(97 + Math.min(index, 25));
+            map[button.id] = symbol;
+          }
+        });
+      
+        return map;
+      }
   
-    function traverse(id) {
-      const node = nodeMap[id];
+    function traverse(node) {
       const { operand_1, operand_2, op } = node.state;
-  
-      // If it's a leaf node, map it to a letter symbol
+        const id = node.id;
+      
       if (operand_1 === null || operand_2 === null || op === null) {
+        // If it's a leaf node, map it to a letter symbol
         if (!(id in idToSymbol)) {
-          const symbol = String.fromCharCode(97 + symbolIndex); // 'a' = 97
-          idToSymbol[id] = symbol;
-          symbolIndex++;
+          console.error("ID not in map:", id);
         }
+
         return {
           algebraic: idToSymbol[id],
           numeric: node.value.toString()
         };
-      }
-  
-      const left = traverse(operand_1);
-      const right = traverse(operand_2);
-      const operator = op.value;
-  
-      return {
-        algebraic: `(${left.algebraic} ${operator} ${right.algebraic})`,
-        numeric: `(${left.numeric} ${operator} ${right.numeric})`
-      };
+      } 
+      else {
+        // If it's an operator node, traverse its children
+            const left = traverse(operand_1);
+            const right = traverse(operand_2);
+            const operator = op.value;
+        
+            return {
+                algebraic: `(${left.algebraic} ${operator} ${right.algebraic})`,
+                numeric: `(${left.numeric} ${operator} ${right.numeric})`
+            };
+        }
     }
-  
-    return traverse(rootID);
+    const idToSymbol = buildIdToSymbolMapFromDOM();
+    // idToSymbol is global variable, visible in traverse function.
+    const rootNode = document.getElementById(rootID);
+    return traverse(rootNode);
   } // End buildExpressions
+
+// Convert algebraic expression to numeric expression using the current input numbers
+  function algebraic2Numeric(expr) {
+    return expr.replace(/\b[a-z]\b/g, (match) => {
+      const index = match.charCodeAt(0) - 97; // 'a'.charCodeAt(0) === 97
+      const replacement = inputNumbers[index];
+      return replacement !== undefined ? replacement : match; // fall back to original if missing
+    });
+  }
