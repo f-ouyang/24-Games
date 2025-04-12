@@ -77,7 +77,9 @@
      <!-- All solutions -->
     <div class="setting-Group"><!-- Input box for number of numbers -->
        <span>All Solutions </span>
-      <input type="checkbox" id="ID_ALL_SOLUTIONS" class="hidden" />
+      <input type="checkbox" id="ID_ALL_SOLUTIONS" class="hidden" 
+        onchange="document.getElementById('ID_SHOW_NUMBER_OF_SOLUTIONS_LABEL').style.display = this.checked ? 
+          'block' : 'none';" /> 
       <!-- TODO: Find a way to apply custom style to make it larger, 
        or change it to slider style. -->
     </div>

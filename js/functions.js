@@ -36,6 +36,12 @@ function startNewGame() {
         obj = document.getElementById("ID_START_OVER");
         obj.disabled = false;
     }
+    {   // Clear previous solutions
+        systemSolutions = [];
+        userSolutions = [];
+        ID_DIV_SOLUTION = document.getElementById("ID_DIV_SOLUTION");
+        ID_DIV_SOLUTION.innerHTML = ""; // Clear previous solutions
+    }
     {// Generate all number buttons}
 
         // 1. Define your custom button class
@@ -193,17 +199,21 @@ function saveSolution() { // service function for "Enter"
         alert("The final answer is incorrect. Please check your calculations.");
         return;
     }
+
     // Build equation based on user input.
     userSolution = buildExpressions(finalAnswerID); // Get the algebraic and numeric expressions
     alert(`You entered the solution as ${userSolution.algebraic} = ${userSolution.numeric}`);
 
     // Check equation to see if it is equivalent to previous solutions
+    const alphabetString = String.fromCharCode(...Array.from({ length: 26 }, (_, i) => i + 97));
+    const symbols = [...alphabetString.slice(0,inputNumbers.length)];
     exp1=userSolution.algebraic;
-    for (let i = 0; i < userSolution.length; i++) {
+    for (let i = 0; i < userSolutions.length; i++) {
         exp2=userSolutions[i].algebraic;
-        if (checkEquivalence(exp1, exp2, inputNumbers)) {
+        if (checkEquivalence(exp1, exp2, symbols,inputNumbers)) {
             exp2Numeric = userSolutions[i].numeric; // Convert to numeric expression
             alert(`The solution you entered: ${userSolution.numeric} is equivalent to previous solution ${exp2Numeric}.`);
+            startInput(); // Reset the input for the next solution
             return;
         }
     }
@@ -212,7 +222,21 @@ function saveSolution() { // service function for "Enter"
     userSolutions.push(userSolution); // Save the solution in the array
     if (!allSolutions) {
         // If only one solution is needed, go to done
-        displaySolution(); // Display the solution
+        displaySolution(); // Display all solutions
+
+    } else {
+        // If all solutions are needed, display the user solution so far
+        const userSolutionsArray = userSolutions.map(solution => solution.numeric);
+        let userSolutionHeading;
+        if (showNumberOfSolutions) {
+            const nSymtemSol = systemSolutions.length;
+            const nUserSol = userSolutions.length;
+            userSolutionHeading = `You have entered ${nUserSol} of ${nSymtemSol} solution(s): `;
+        }   else {
+            userSolutionHeading = "You have entered the following solution(s) so far:";
+        }
+        displaySolutionText(userSolutionHeading, userSolutionsArray,"",""); // Display only the user solutions, not system solutions.
+        startInput(); // Reset the input for the next solution
     }
     return;
 } // End of saveSolution function
@@ -253,33 +277,83 @@ function displaySolution() { // service function for "Done"
     }
 
     // Second, display the solutions
-    displaySolutions(userSolutionHeading, userSolutionsArray, systemSolutionHeading, systemSolutionsArray);
+    displaySolutionText(userSolutionHeading, userSolutionsArray, systemSolutionHeading, systemSolutionsArray);
 
-    // Supporting function to display the solutions
-    function displaySolutions(userSolutionHeading, userSolutionArray, systemSolutionHeading, systemSolutionsArray) {
-        const container = document.getElementById("ID_DIV_SOLUTION");
-        container.innerHTML = ""; // Clear previous contents
-      
-        function createSection(headingText, bodyLines, headingClass, bodyClass) {
-          const heading = document.createElement("div");
-          heading.className = headingClass;
-          heading.textContent = headingText;
-      
-          const body = document.createElement("div");
-          body.className = bodyClass;
-          body.innerHTML = bodyLines.map(line => `${line}<br>`).join("");
-      
-          container.appendChild(heading);
-          container.appendChild(body);
-        }
-      
-        createSection(userSolutionHeading, userSolutionArray, "solution-heading", "solution-body");
-        createSection(systemSolutionHeading, systemSolutionsArray, "system-heading", "system-body");
-      } // End of displaySolutions function
+    // Disable all buttons
+    let obj = document.getElementById("ID_ENTER");
+    obj.disabled = true;
+    obj = document.getElementById("ID_DONE"); 
+    obj.disabled = true;
+    obj = document.getElementById("ID_START_OVER");
+    obj.disabled = true;
 }// End of displaySolution function
 
-function startInput() {
+// Supporting function to display the solutions
+function displaySolutionText(userSolutionHeading, userSolutionsArray, systemSolutionHeading, systemSolutionsArray) {
+const container = document.getElementById("ID_DIV_SOLUTION");
+container.innerHTML = ""; // Clear previous contents
+
+function createSection(headingText, bodyLines, headingClass, bodyClass) {
+    const heading = document.createElement("div");
+    heading.className = headingClass;
+    heading.textContent = headingText;
+
+    const body = document.createElement("div");
+    body.className = bodyClass;
+    body.innerHTML = bodyLines.map(line => `${line}<br>`).join("");
+
+    container.appendChild(heading);
+    container.appendChild(body);
 }
+
+createSection(userSolutionHeading, userSolutionsArray, "solution-heading", "solution-body");
+if (systemSolutionHeading.length > 0) { //if the heading is empty, it means do not display the system solutions.
+     createSection(systemSolutionHeading, systemSolutionsArray, "system-heading", "system-body");
+    }
+} // End of displaySolutions function
+function startInput() {
+    // reset all buttons for the current solution
+    // Reset all buttons
+
+    // Reset all input buttons
+    for (let buttonIndex = 0; buttonIndex < numberOfNumbers; buttonIndex++) {
+        const buttonID=`ID_NUMBER_BUTTON_${buttonIndex}`; 
+        //This must be consistent with those in createNumberButtons.
+        const buttonObject = document.getElementById(buttonID);
+        buttonObject.disabled = false; // Enable the button
+        buttonObject.draggable = true; // Enable dragging
+    }
+
+    // Reset all target buttons
+    const targetButtons = document.querySelectorAll("[id^='ID_OPRAND_BUTTON_']");
+    targetButtons.forEach(button => {
+        button.textContent = "?"; // Reset the button text
+        button.disabled = true; // Disable the button
+        button.sourceObject = null; // Reset the source object reference
+        button.classList.remove("dragover"); // Reset the style
+    });
+
+    // Reset all operator selectors
+    const operatorSelectors = document.querySelectorAll("[id^='ID_OP_SELECT_']");
+    operatorSelectors.forEach(selector => {
+        selector.value = "?"; // Reset the operator selector value
+    });
+
+    // Reset all result buttons
+    const resultButtons = document.querySelectorAll("[id^='ID_RESULT_BUTTON_']");
+    resultButtons.forEach(button => {
+        button.textContent = "?"; // Reset the button text
+        button.value = ""; // Reset the button value
+        button.state.operand_1 = null; // Reset the operand 1 reference
+        button.state.operand_2 = null; // Reset the operand 2 reference 
+        button.state.op = null; // Reset the operator reference
+        button.targetObject = null; // Reset the target object reference
+        button.draggable = false; // Disable dragging
+        button.disabled = true; // Disable the button
+    });
+
+}
+ 
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Drag and Drop Supporting
@@ -329,9 +403,11 @@ function targetDropHandler(event){
     const draggedObj = document.getElementById(draggedID);
     event.target.sourceObject = draggedObj;
     event.target.textContent = draggedObj.textContent; 
-    //
+    // Update the source object state
     draggedObj.disabled = true; // Disable the button
     draggedObj.draggable = false; // Disable dragging
+    draggedObj.linkedTarget = event.target; // Link the target button to the source button
+
     //Update answer button
     switch (event.target.targetType) {
         case 1:{
@@ -345,6 +421,7 @@ function targetDropHandler(event){
         default:
             console.error("Illegal Type value for target obj.");
     }          
+    event.target.disabled = false; // Enable the target button clicking
 }
 
 
@@ -356,23 +433,40 @@ function targetDragOverHandler(event){
 }
 
 function targetClickHandler(event){
-    //Reset the states
-   
-    //Reset the target: no need
-    
-    //event.target.currentNumber=event.target.previousNumber;
-    //event.target.innerText=String(event.target.currentNumber);
-    
-    //Reset the source
-    sourceObject = event.target.sourceObject;
+    myObject = event.target; // The target button that was clicked
+    resetTargetState(myObject); // Reset the target button state
+}
+
+function resetTargetState(targetObject) { // Reset the target button state
+    //Serving target click and can be called remotely
+    // Resets the state and content of the target button and reset associated buttons
+
+    const sourceObject = targetObject.sourceObject;
     if (sourceObject === null) return; // Nothing to do if no source object
+
+
+        //Reset the source
     sourceObject.classList.remove('disabled');//TODO: is this done automatically?
     sourceObject.disabled = false;
     sourceObject.draggable = true; // Enable dragging again
-    answerObject = event.target.answerObject;
-    event.target.textContent = "?"; // Reset the target button text
-    event.target.sourceObject = null; // Reset the source object reference
-    switch (event.target.targetType) {
+    sourceObject.linkedTarget = null; // Reset the linked target reference
+ 
+    
+
+    // Reset self states
+    targetObject.textContent = "?"; // Reset the target button text
+    targetObject.sourceObject = null; // Reset the source object reference
+    targetObject.disabled = true; // Disable the target button
+
+    //Reset the associated answer object
+    const answerObject = targetObject.answerObject;
+    // Reset the propagated objects
+    const linkedTargetObj = answerObject.linkedTarget;
+    if (linkedTargetObj !== null) {
+        resetTargetState(linkedTargetObj); // Reset the linked target button state
+    }   
+    
+    switch (targetObject.targetType) {
         case 1:{
             answerObject.state.operand_1 = null;
             break;
@@ -384,14 +478,6 @@ function targetClickHandler(event){
         default:
             console.error("Illegal Type value for target obj.");
     }
-   
-/*
-    sourceObject.style.opacity = 1;
-    event.target.sourceObject.style.pointer_Events = "auto";
-    event.target.sourceObject.setAttribute("draggable", "true");
-    const displayNumber=Math.round(Math.random()*1000); // random integer between 0 and 1000
-    event.target.sourceObject.innerText=displayNumber; // display the number in text
-*/
 }
 
 
@@ -592,6 +678,12 @@ function setupFieldUpdates() {
  // All Solutions
  obj=document.getElementById("ID_ALL_SOLUTIONS");
  allSolutions = obj.checked;
+ if(allSolutions) {
+        document.getElementById("ID_SHOW_NUMBER_OF_SOLUTIONS_LABEL").style.display = "block";
+    }
+    else {
+        document.getElementById("ID_SHOW_NUMBER_OF_SOLUTIONS_LABEL").style.display = "none";
+    }
  // Show Number of Solutions
  obj=document.getElementById("ID_SHOW_NUMBER_OF_SOLUTIONS");
  showNumberOfSolutions = obj.checked;
