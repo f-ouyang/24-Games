@@ -95,10 +95,10 @@ function startNewGame() {
         container.innerHTML = ""; // Clear existing buttons
         for (let i = 0; i < numberOfNumbers; i++) {
         const btn = document.createElement("button", { is: "number-button" });
+        btn.classList.add("numberButton");
         btn.id = `ID_NUMBER_BUTTON_${i}`;
         btn.textContent = "?";
         container.appendChild(btn);
-        this.classList.add("numberButton"); // Just to be sure.
         }   
     }   // End of createNumberButtons function
     function generateEquations(numberOfNumbers) {
