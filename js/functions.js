@@ -99,6 +99,7 @@ function startNewGame() {
         btn.textContent = "?";
         container.appendChild(btn);
         this.classList.add("numberButton"); // Just to be sure.
+        this.classList.add("numberButton"); // Just to be sure.
         }   
     }   // End of createNumberButtons function
     function generateEquations(numberOfNumbers) {
