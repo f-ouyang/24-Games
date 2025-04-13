@@ -98,6 +98,7 @@ function startNewGame() {
         btn.id = `ID_NUMBER_BUTTON_${i}`;
         btn.textContent = "?";
         container.appendChild(btn);
+        this.classList.add("numberButton"); // Just to be sure.
         }   
     }   // End of createNumberButtons function
     function generateEquations(numberOfNumbers) {
