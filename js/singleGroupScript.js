@@ -8,7 +8,7 @@ const selectedValue = selectElement.value;
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // =================================================================
 
-//Default Values, to be imported from user settgings in the futre
+//Default Values, to be imported from user settings in the future
 const numberOfNumbersDefault = 4;
 const maximumNumberDefault = 9;
 const targetIntegerDefault = 24;
@@ -211,6 +211,7 @@ class targetButtonJavaClass extends HTMLButtonElement {
     }
 } // End of targetButtonJavaClass
 
+/* This class is replaced by createOpSelector function 
   class OpSelector extends HTMLSelectElement {
     constructor() {
       super();
@@ -234,10 +235,11 @@ class targetButtonJavaClass extends HTMLButtonElement {
     }
     
 } // End of OpSelector Class
+*/
 
 /* Register the custom classes */
 customElements.define("target-button", targetButtonJavaClass, { extends: "button" });
 customElements.define("number-button", numberButtonJavaClass, { extends: "button" });
-customElements.define("op-selector", OpSelector, { extends: "select" });
+/* customElements.define("op-selector", OpSelector, { extends: "select" }); this sytle was removed. */
 
 

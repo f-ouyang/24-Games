@@ -119,9 +119,16 @@ function startNewGame() {
             row.appendChild(operand1);
         
             // Operator Selector
+            /* Original code 
             const opSelect = document.createElement("select", { is: "op-selector" });
             opSelect.id = opID;
             //opSelect.classList.add("equation-operator"); //Should have been added in class
+            row.appendChild(opSelect);
+            */
+
+            // Operator Alternative
+            const opSelect = createOpSelector();
+            opSelect.id = opID;
             row.appendChild(opSelect);
         
             // Operand Button 2
@@ -371,12 +378,16 @@ function handleChange(event) {
     // TODO: can we just use "this" here?
     const thisObject = event.target; // The op-selector that fired the event
     answerObject = thisObject.answerObject; // get the link to the result button
-    if (thisObject.value === "?") {
-        answerObject.state.op = null; // Indicate the operator is not set
-    }
-    else {  // Set the operator in the answer object
-        answerObject.state.op = thisObject; // Set the operator in the answer object
-    }
+        if (thisObject.value === "?") {
+            answerObject.state.op = null; // Indicate the operator is not set
+        }
+        else {  // Set the operator in the answer object
+            answerObject.state.op = thisObject; // Set the operator in the answer object
+        }
+        // Force update of answer button UI
+        if (typeof answerObject.updateInternalState === 'function') {
+            answerObject.updateInternalState();
+        }
 }
       
 
@@ -421,7 +432,11 @@ function targetDropHandler(event){
         }
         default:
             console.error("Illegal Type value for target obj.");
-    }          
+    }
+    // Force update of answer button UI
+    if (typeof event.target.answerObject.updateInternalState === 'function') {
+        event.target.answerObject.updateInternalState();
+    }
     event.target.disabled = false; // Enable the target button clicking
 }
 
@@ -758,3 +773,26 @@ function buildExpressions(rootID) {
       return replacement !== undefined ? replacement : match; // fall back to original if missing
     });
   }
+
+  // Generator for operator selector with customized contents
+  function createOpSelector() {
+    const select = document.createElement('select');
+    select.classList.add("op-button");
+    select.classList.add("equation-operator");
+    
+    
+    const ops = ["?", "+", "-", "*", "/"];
+    const opsDisplay = ["?", "+", "-", "×", "÷"];
+    
+    ops.forEach((op, index) => {
+        const option = document.createElement("option");
+        option.value = op;
+        option.textContent = opsDisplay[index];
+        select.appendChild(option);
+    });
+    
+    select.addEventListener("change", handleChange);
+    select.answerObject = null;
+    
+    return select;
+}
