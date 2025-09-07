@@ -181,8 +181,3 @@ function createOpSelector() {
     
     return select;
 }
-// *** Corresponding generator code
-const opSelectorInstance = new OpSelector();
-const opSelect = opSelectorInstance.element; // Get the actual DOM element
-opSelect.id = opID;
-row.appendChild(opSelect);
