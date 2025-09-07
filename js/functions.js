@@ -408,36 +408,49 @@ function targetDragLeaveHandler(event){
 
 function targetDropHandler(event){
     if (event.target.sourceObject !== null) return; // Nothing to do if source is already assigned
+    // Interface apparent update
     event.preventDefault();
     event.target.classList.remove("dragover");  
+
+    // Get related parameters
     // Update records
     const draggedID = event.dataTransfer.getData("text/plain");
     const draggedObj = document.getElementById(draggedID);
-    event.target.sourceObject = draggedObj;
-    event.target.textContent = draggedObj.textContent; 
+    const targetObject = event.target; // The target button that received the drop
+
+    targetDropAssignUpdate(targetObject, draggedObj);
+/*  This part is replaced by the function targetDropAssignUpdate
+
+
+    targetObject.sourceObject = draggedObj;
+    targetObject.textContent = draggedObj.textContent; 
+
+
     // Update the source object state
     draggedObj.disabled = true; // Disable the button
     draggedObj.draggable = false; // Disable dragging
-    draggedObj.linkedTarget = event.target; // Link the target button to the source button
+    draggedObj.linkedTarget = targetObject; // Link the target button to the source button
+    // These operations are OK even for tap events. However, more handling may be needed for tap events.
 
     //Update answer button
-    switch (event.target.targetType) {
+    switch (targetObject.targetType) {
         case 1:{
-            event.target.answerObject.state.operand_1 = draggedObj;
+            targetObject.answerObject.state.operand_1 = draggedObj;
             break;
         }   
         case 2:{
-            event.target.answerObject.state.operand_2 = draggedObj;
+            targetObject.answerObject.state.operand_2 = draggedObj;
             break;
         }
         default:
             console.error("Illegal Type value for target obj.");
     }
     // Force update of answer button UI
-    if (typeof event.target.answerObject.updateInternalState === 'function') {
-        event.target.answerObject.updateInternalState();
+    if (typeof targetObject.answerObject.updateInternalState === 'function') {
+        targetObject.answerObject.updateInternalState();
     }
-    event.target.disabled = false; // Enable the target button clicking
+    targetObject.disabled = false; // Enable the target button clicking 
+    */
 }
 
 
@@ -795,4 +808,34 @@ function buildExpressions(rootID) {
     select.answerObject = null;
     
     return select;
+}
+
+function targetDropAssignUpdate(targetObject, draggedObj){
+    // This function is not used now. It can be used to assign the drop target and update the states.
+    targetObject.sourceObject = draggedObj;
+    targetObject.textContent = draggedObj.textContent;
+    // Update the source object state
+    draggedObj.disabled = true; // Disable the button
+    draggedObj.draggable = false; // Disable dragging
+    draggedObj.linkedTarget = targetObject; // Link the target button to the source button
+    // These operations are OK even for tap events. However, more handling may be needed for tap events.
+
+    //Update answer button
+    switch (targetObject.targetType) {
+        case 1:{
+            targetObject.answerObject.state.operand_1 = draggedObj;
+            break;
+        }   
+        case 2:{
+            targetObject.answerObject.state.operand_2 = draggedObj;
+            break;
+        }
+        default:
+            console.error("Illegal Type value for target obj.");
+    }
+    // Force update of answer button UI
+    if (typeof targetObject.answerObject.updateInternalState === 'function') {
+        targetObject.answerObject.updateInternalState();
+    }
+    targetObject.disabled = false; // Enable the target button clicking
 }
