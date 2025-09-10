@@ -212,7 +212,8 @@ body{
     font-weight: bold;*/
     color: yellow;
     background-color: red;
-    @keyframes flash-coler {
+    /* This animation doesn't work. Removing it for now.
+    @keyframes flash-color {
       from {
               background-color: red;
             }
@@ -220,7 +221,8 @@ body{
               background-color: yellow;
             }   
      }
-    animation: flash 1s infinite alternate;
+    animation: flash-color 1s infinite alternate;
+    */
 }
 
 .numberButton.selected:hover {
