@@ -526,7 +526,7 @@ function resetTargetState(targetObject) { // Reset the target button state
 // ----------------------------------------------------------
 // Listeners
 // ----------------------------------------------------------
-function handleNumberButtonTap(event) {
+function handleNumberButtonTap(event) { 
     const button = event.currentTarget;
 
     //test test
