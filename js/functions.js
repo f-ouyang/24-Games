@@ -336,7 +336,12 @@ function startInput() {
     const targetButtons = document.querySelectorAll("[id^='ID_OPRAND_BUTTON_']");
     targetButtons.forEach(button => {
         button.textContent = "?"; // Reset the button text
-        button.disabled = true; // Disable the button
+        if (isTouchDevice) {
+            // Enable target for future assignments
+            button.disabled = false; // Enable the target button clicking
+        } else {
+            button.disabled = true; // Disable the button
+        }
         button.sourceObject = null; // Reset the source object reference
         button.classList.remove("dragover"); // Reset the style
     });
@@ -465,6 +470,10 @@ function targetClickHandler(event){
     myObject = event.target; // The target button that was clicked
     if (myObject.sourceObject === null) return; // Nothing to do if no source object
     resetTargetState(myObject); // Reset the target button state
+    if (isTouchDevice) {
+        // Enable target for future assignments
+        myObject.disabled = false; // Enable the target button clicking
+    }
 }
 
 function resetTargetState(targetObject) { // Reset the target button state
@@ -544,9 +553,11 @@ function handleNumberButtonTap(event) {
         clearTimeout(selectionTimeout);
         selectionTimeout = null;
     }   
+    /* test test
     selectionTimeout = setTimeout(() => {
         clearSelection();
      }, SELECTION_TIMEOUT_MS);
+     */
 }
 
 // Target button tap handler
@@ -577,12 +588,16 @@ function handleTargetButtonTap(event) {
         // Clear selection
         clearSelection(); */
     } else if (!selectedButtonID) {
+        // No number button is selected.
         return;
         // Optional: Show user feedback here
     } else if (button.textContent !== '?') {
+        // A number is already assigned to this target
         // Do nothing, let the other handler deal with it
         return;
     }
+    // Disable the original button
+    selectedButton.disabled = true;
 }
 
 
@@ -635,26 +650,8 @@ function createOpSelector() {
 }
 
 function initializeGame() {
-    // Add event listeners to all number buttons
-    document.querySelectorAll('.number-btn').forEach(button => {
-        button.addEventListener('click', handleNumberButtonTap);
-    });
-    
-    // Add event listeners to all target buttons
-    document.querySelectorAll('.target-btn').forEach(button => {
-        button.addEventListener('click', handleTargetButtonTap);
-    });
-    
-    // Optional: Clear selection if user clicks elsewhere
-    document.addEventListener('click', function(event) {
-        const clickedElement = event.target;
-        
-        // If clicked element is not a number or target button, clear selection
-        if (!clickedElement.classList.contains('number-btn') && 
-            !clickedElement.classList.contains('target-btn')) {
-            clearSelection();
-        }
-    });
+    // This is called when the page is loaded.
+    return;
 }
 
 

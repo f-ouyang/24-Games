@@ -177,34 +177,53 @@ body{
     cursor: pointer;
   }
 
+  /*
+
   .numberButton:disabled{
     opacity: 0.5;
     background-color: grey;
     cursor: not-allowed;
   }
 
-  /* State 1: Enabled (default state) */
-.number-btn:enabled {
+   State 1: Enabled (default state) 
+.numberButton:enabled {
     border-color: #ccc;
     background: #fff;
     color: #333;
 }
 
-.number-btn:enabled:hover {
+.numberButton:enabled:hover {
     border-color: #999;
     background: #f0f0f0;
 }
-
+*/
 /* State 2: Selected */
-.number-btn.selected {
+.numberButton:disabled{
+  opacity: 0.5;
+  background-color: grey;
+  cursor: not-allowed;
+}
+.numberButton.selected {
+  /*
     border-color: #007AFF;
     background-color: #E3F2FD;
     box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
     color: #007AFF;
-    font-weight: bold;
+    font-weight: bold;*/
+    color: yellow;
+    background-color: red;
+    @keyframes flash-coler {
+      from {
+              background-color: red;
+            }
+            to {
+              background-color: yellow;
+            }   
+     }
+    animation: flash 1s infinite alternate;
 }
 
-.number-btn.selected:hover {
+.numberButton.selected:hover {
     background-color: #BBDEFB;
 }
 
