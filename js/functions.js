@@ -528,6 +528,9 @@ function resetTargetState(targetObject) { // Reset the target button state
 // ----------------------------------------------------------
 function handleNumberButtonTap(event) {
     const button = event.currentTarget;
+
+    //test test
+    alert(`Tapped button with ID: ${button.id} and value: ${button.value}`);
     
     // Don't select if button is disabled
     if (button.disabled) return;
