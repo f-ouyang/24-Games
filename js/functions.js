@@ -94,7 +94,7 @@ function startNewGame() {
         const container = document.getElementById("ID_DIV_INPUT");
         container.innerHTML = ""; // Clear existing buttons
         for (let i = 0; i < numberOfNumbers; i++) {
-        const btn = document.createElement("button", { is: "number-button" });
+        const btn = document.createElement("button"/*, { is: "number-button" }*/);
         customizeNumberButton(btn); // Call the customization function
         // additional settings
         btn.classList.add("numberButton");
@@ -172,7 +172,7 @@ function startNewGame() {
             row.appendChild(equalSign);
         
             // Result Button
-            const resultBtn = document.createElement("button", { is: "number-button" });
+            const resultBtn = document.createElement("button", /*{ is: "number-button" }*/);
             customizeNumberButton(resultBtn);
             // additional settings
             resultBtn.id = `ID_RESULT_BUTTON_${i}`;
@@ -1115,6 +1115,6 @@ function targetDropAssignUpdate(targetObject, draggedObj){
         if (!isTouchDevice) {
             targetButton.disabled = true; // Disable the button by default
         } else {
-            targetButton.disabled = false; // Enable the button for touch devices
+            this.disabled = false; // Enable the button for touch devices
         } 
     }
