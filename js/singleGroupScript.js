@@ -206,9 +206,9 @@ class numberButtonJavaClass extends HTMLButtonElement {
 
 
 class targetButtonJavaClass extends HTMLButtonElement {
-    // TODO This is a scaffold for now. The final version will have more logic
     constructor() {
         super();
+        /*
         this.classList.add("numberButton");
         this.classList.add("targetButton");
         this.sourceObject = null; // Initialize sourceObject property to null
@@ -238,6 +238,7 @@ class targetButtonJavaClass extends HTMLButtonElement {
         } else {
             this.disabled = false; // Enable the button for touch devices
         } 
+            */
       }
 /* 
       // These functions seem unnecessary now.

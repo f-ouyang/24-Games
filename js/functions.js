@@ -136,6 +136,8 @@ function startNewGame() {
             const opID = `ID_OP_SELECT_${i}`;
             // Operand Button 1
             const operand1 = document.createElement("button", { is: "target-button" });
+            customizeTargetButton(operand1); 
+            // Additional settings
             operand1.id = oprandeID1;
             operand1.textContent="?";
             operand1.targetType = 1; // Type 1 for operand 1
@@ -156,6 +158,8 @@ function startNewGame() {
         
             // Operand Button 2
             const operand2 = document.createElement("button", { is: "target-button" });
+             customizeTargetButton(operand2); 
+             // Additional settings
             operand2.id = oprandeID2;
             operand2.targetType = 2; // Type 2 for operand 2
             operand2.textContent = "?";
@@ -597,10 +601,10 @@ function handleTargetButtonTap(event) {
     if (!isTouchDevice) return; // Only handle touch devices here.
 
     const button = event.currentTarget;
-    
+    const selectedButton = document.getElementById(selectedButtonID);
     // Only assign if we have a selection and target is empty
     if (selectedButtonID && button.textContent === '?') {
-        const selectedButton = document.getElementById(selectedButtonID);
+        
         targetDropAssignUpdate(button, selectedButton);
         /*
         // Assign number to target
@@ -1081,4 +1085,36 @@ function targetDropAssignUpdate(targetObject, draggedObj){
         }
       }); 
       
+    }
+
+    function customizeTargetButton(targetButton) {
+        targetButton.classList.add("numberButton");
+        targetButton.classList.add("targetButton");
+        targetButton.sourceObject = null; // Initialize sourceObject property to null
+        targetButton.answerObject = null;
+        targetButton.targetType = null; // To be set when the button is created
+
+        // Add shared behavior for all buttons
+        targetButton.addEventListener("dragenter", targetDragEnterHandler);
+        targetButton.addEventListener ("dragleave", targetDragLeaveHandler);
+        targetButton.addEventListener("drop", targetDropHandler);
+        targetButton.addEventListener("dragover", targetDragOverHandler);
+        targetButton.addEventListener("click", targetClickHandler);
+        // The following listener is only for mobile devices.
+        
+        if (isTouchDevice) {
+          targetButton.addEventListener('click', handleTargetButtonTap);
+        } 
+        // Note: for mobile devices, click has two listeners. They will all fire.
+
+        // add properties
+        targetButton.sourceObject = null; //The number button that drops here
+        targetButton.answerObject = null; // link to the answer button
+
+        // Disable only if it is not mobile device
+        if (!isTouchDevice) {
+            targetButton.disabled = true; // Disable the button by default
+        } else {
+            targetButton.disabled = false; // Enable the button for touch devices
+        } 
     }
