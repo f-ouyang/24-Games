@@ -135,7 +135,7 @@ function startNewGame() {
             const oprandeID2 = `ID_OPRAND_BUTTON_2_${i}`;
             const opID = `ID_OP_SELECT_${i}`;
             // Operand Button 1
-            const operand1 = document.createElement("button", { is: "target-button" });
+            const operand1 = document.createElement("button"/*, { is: "target-button" }*/);
             customizeTargetButton(operand1); 
             // Additional settings
             operand1.id = oprandeID1;
@@ -157,7 +157,7 @@ function startNewGame() {
             row.appendChild(opSelect);
         
             // Operand Button 2
-            const operand2 = document.createElement("button", { is: "target-button" });
+            const operand2 = document.createElement("button"/*, { is: "target-button" }*/);
              customizeTargetButton(operand2); 
              // Additional settings
             operand2.id = oprandeID2;

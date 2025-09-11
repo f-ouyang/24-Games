@@ -113,6 +113,7 @@ setupFieldUpdates(); // Set up the field updates for the settings
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Game Button Classes
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 class numberButtonJavaClass extends HTMLButtonElement { 
   // This may not be needed.
     constructor() {
@@ -279,8 +280,10 @@ class targetButtonJavaClass extends HTMLButtonElement {
 */
 
 /* Register the custom classes */
+/*
 customElements.define("target-button", targetButtonJavaClass, { extends: "button" });
 customElements.define("number-button", numberButtonJavaClass, { extends: "button" });
+*/
 /* customElements.define("op-selector", OpSelector, { extends: "select" }); this sytle was removed. */
 
 
