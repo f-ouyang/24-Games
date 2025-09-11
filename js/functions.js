@@ -1017,7 +1017,7 @@ function targetDropAssignUpdate(targetObject, draggedObj){
 // Custom Class Support Functions
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Called when state.operand_1, operand_2, or op is changed in number button.
-    function updateNumberButtonInternalState(numberObject) {
+    function updateNumberButtonInternalState(numberObject) { 
       if ([numberObject.state.operand_1, numberObject.state.operand_2, numberObject.state.op].some(v => v === null)) {
         numberObject.textContent = '?';
         numberObject.value = ''; // Clear the value when not all operands are set
