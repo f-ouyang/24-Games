@@ -114,44 +114,53 @@ setupFieldUpdates(); // Set up the field updates for the settings
 // Game Button Classes
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 class numberButtonJavaClass extends HTMLButtonElement { 
+  // This may not be needed.
     constructor() {
       super();
+      /* 
       this.classList.add("numberButton");
       this.setAttribute("draggable", "true"); // Make it draggable
       // Add shared behavior for all buttons
       this.linkedTarget = null; // The target button that this number button is linked to
-      /* this.addEventListener("dragenter", targetDragEnterHandler); test test */
+      
       this.addEventListener("dragstart", draggableDragStartHandler);
+      */
       // Add the following listener only for mobile devices.
-      if (isTouchDevice) {
-          this.addEventListener('click', handleNumberButtonTap);
-      }
-
+      /*
+      */
       // Internal state to track operands and operator
+      /*
       const state = {
         operand_1: null,
         operand_2: null,
         op: null
       };
-
+      */
+/*
       // Default: Disabled
     
       this.disabled = true;
       this.draggable = false; 
+      */
   
       // Wrap state with Proxy to react to changes
+      
+      // Move to createNumberButtons function
+      /*
       this.state = new Proxy(state, {
         set: (target, prop, value) => {
           if (["operand_1", "operand_2", "op"].includes(prop)) {
             target[prop] = value;
-            this.updateInternalState();
+            updateNumberButtonInternalState(this);
             return true;
           }
           return false;
         }
-      });
+      }); 
+      */
     }
-  
+    /*
+    // This has been moved to an external function.
     // Called when state.operand_1, operand_2, or op is changed
     updateInternalState() {
       if ([this.state.operand_1, this.state.operand_2, this.state.op].some(v => v === null)) {
@@ -168,15 +177,7 @@ class numberButtonJavaClass extends HTMLButtonElement {
         try {
           const answer = math.evaluate(expression);
           this.value = answer; // Store the answer in the button's value
-          /*
-          if(Number.isInteger(answer)) {
-            this.textContent = answer.toFixed(0); // Display the answer
-          }
-          else {// approximate with a simple fraction.
-            const frac = math.fraction(answer); // We hope it won't be complicated by rounding error
-            this.textContent = frac.toFraction(true); // Display the answer
-           }
-            */ // test test: we probably don't need this logic as toFraction can handle integers too.
+          
           const frac = math.fraction(answer); // We hope it won't be complicated by rounding error
           this.textContent = frac.toFraction(true); // Display the answer
         } catch (err) {
@@ -188,7 +189,9 @@ class numberButtonJavaClass extends HTMLButtonElement {
         this.draggable = true;  
       }// end of else
     }// end of updateInternalState()
-  
+  */
+ /* 
+
     select() {
       this.classList.add("selected");
     }
@@ -196,6 +199,7 @@ class numberButtonJavaClass extends HTMLButtonElement {
     deselect() {
       this.classList.remove("selected");
     }
+      */
   }// end of class numberButtonJavaClass
 
 
@@ -235,7 +239,8 @@ class targetButtonJavaClass extends HTMLButtonElement {
             this.disabled = false; // Enable the button for touch devices
         } 
       }
-
+/* 
+      // These functions seem unnecessary now.
     select() {
         this.classList.add("selected");
     }
@@ -243,6 +248,7 @@ class targetButtonJavaClass extends HTMLButtonElement {
     deselect() {
         this.classList.remove("selected");
     } 
+        */
 } // End of targetButtonJavaClass
 
 /* This class is replaced by createOpSelector function 

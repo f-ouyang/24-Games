@@ -95,11 +95,34 @@ function startNewGame() {
         container.innerHTML = ""; // Clear existing buttons
         for (let i = 0; i < numberOfNumbers; i++) {
         const btn = document.createElement("button", { is: "number-button" });
+        customizeNumberButton(btn); // Call the customization function
+        // additional settings
         btn.classList.add("numberButton");
         btn.id = `ID_NUMBER_BUTTON_${i}`;
         btn.textContent = "?";
         container.appendChild(btn);
-        }   
+        //
+        // The following operaitons are migrated from class constructor
+        //
+        const state = {
+            operand_1: null,
+            operand_2: null,
+            op: null
+        };
+        btn.state = new Proxy(state, {
+            set: (target, prop, value) => {
+          if (["operand_1", "operand_2", "op"].includes(prop)) {
+            target[prop] = value;
+            updateNumberButtonInternalState(btn);
+            return true;
+          }
+          return false;
+        }
+      });
+
+        }  
+    
+    
     }   // End of createNumberButtons function
     function generateEquations(numberOfNumbers) {
         const container = document.getElementById("ID_DIV_EQUATION");
@@ -146,6 +169,8 @@ function startNewGame() {
         
             // Result Button
             const resultBtn = document.createElement("button", { is: "number-button" });
+            customizeNumberButton(resultBtn);
+            // additional settings
             resultBtn.id = `ID_RESULT_BUTTON_${i}`;
             resultBtn.classList.add("equation-result");
             resultBtn.textContent = "?";
@@ -987,3 +1012,73 @@ function targetDropAssignUpdate(targetObject, draggedObj){
     }
     targetObject.disabled = false; // Enable the target button clicking
 }
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Custom Class Support Functions
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Called when state.operand_1, operand_2, or op is changed in number button.
+    function updateNumberButtonInternalState(numberObject) {
+      if ([numberObject.state.operand_1, numberObject.state.operand_2, numberObject.state.op].some(v => v === null)) {
+        numberObject.textContent = '?';
+        numberObject.value = ''; // Clear the value when not all operands are set
+        numberObject.disabled = true; // Disable the button when not all operands are set
+        numberObject.draggable = false; // Disable dragging when not all operands are set
+      } else {
+        const symb1 = numberObject.state.operand_1.value;
+        const symb2 = numberObject.state.op.value;
+        const symb3 = numberObject.state.operand_2.value;
+  
+        const expression = `${symb1}${symb2}${symb3}`;
+        try {
+          const answer = math.evaluate(expression);
+          numberObject.value = answer; // Store the answer in the button's value
+
+          const frac = math.fraction(answer); // We hope it won't be complicated by rounding error
+          numberObject.textContent = frac.toFraction(true); // Display the answer
+        } catch (err) {
+          console.error("Expression error:", err);
+          numberObject.textContent = '?';
+        }
+        // Enable the button for dragging
+        numberObject.disabled = false;
+        numberObject.draggable = true;  
+      }// end of else
+    }
+
+    // end of updateNumberButtonInternalState()
+
+    // Custom Settings of Number and target buttons
+    function customizeNumberButton(numberButton) {
+        // We will gradually move actions from creator to here.
+        numberButton.classList.add("numberButton");
+        numberButton.setAttribute("draggable", "true"); // Make it draggable
+        // Add shared behavior for all buttons
+        numberButton.linkedTarget = null; // The target button that this number button is linked to
+        
+        numberButton.addEventListener("dragstart", draggableDragStartHandler);
+        if (isTouchDevice) {
+            numberButton.addEventListener('click', handleNumberButtonTap);
+            // Add tap listener only for touch devices
+        }
+
+        // Default: Disabled
+        numberButton.disabled = true;
+        numberButton.draggable = false; 
+        // Set proxy to handle state changes
+        const state = {
+        operand_1: null,
+        operand_2: null,
+        op: null
+      };
+        numberButton.state = new Proxy(state, {
+        set: (target, prop, value) => {
+            if (["operand_1", "operand_2", "op"].includes(prop)) {
+            target[prop] = value;
+            updateNumberButtonInternalState(numberButton);
+            return true;
+            }
+            return false;
+        }
+      }); 
+      
+    }
