@@ -239,7 +239,7 @@ function saveSolution() { // service function for "Enter"
 
     // Build equation based on user input.
     userSolution = buildExpressions(finalAnswerID); // Get the algebraic and numeric expressions
-    alert(`You entered the solution as ${userSolution.algebraic} = ${userSolution.numeric}`);
+    //alert(`You entered the solution as ${userSolution.algebraic} = ${userSolution.numeric}`);
 
     // Check equation to see if it is equivalent to previous solutions
     const alphabetString = String.fromCharCode(...Array.from({ length: 26 }, (_, i) => i + 97));
@@ -559,7 +559,7 @@ function handleNumberButtonTap(event) {
     const button = event.currentTarget;
 
     //test test
-    alert(`Tapped button with ID: ${button.id} and value: ${button.value}`);
+    //alert(`Tapped button with ID: ${button.id} and value: ${button.value}`);
     
     // Don't select if button is disabled
     if (button.disabled) return;
